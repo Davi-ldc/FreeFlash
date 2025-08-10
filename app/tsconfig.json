@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",//mais recente
+    "module": "ESNext",//mais recente
+    "moduleResolution": "node",
+    "strict": true,
+    "types": ["vite/client"],
+    "esModuleInterop": true,//pra importar libs antigas
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./src",
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src/**/*",
+    "*.ts",
+    "src/types/*",
+    "server/**/*",
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
+

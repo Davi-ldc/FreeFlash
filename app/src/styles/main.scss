@@ -1,0 +1,27 @@
+@use 'sass:map';
+@use 'base/reset';
+@use 'base/locomotive-scroll';
+@use 'base/fonts';
+
+/*
+* Variáveis
+*/
+$color-white: #E8E8E8;
+$color-black: #101010;
+
+$font-fallback-sans: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
+$font-fallback-serif: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+$font-primary-sans: 'Font Name', $font-fallback-sans;
+$font-primary-serif: 'Font Name', $font-fallback-serif;
+
+// $font-sizes: (
+// );
+
+// $z-index: (
+// );
+
+// $padding-global: 1em;
+
+/*
+* Mixins
+*/
