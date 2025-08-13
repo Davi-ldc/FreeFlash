@@ -3,10 +3,11 @@ Uma dev stack opinativa, simples, rápida e com o menor curto de hospedagem poss
 
 ## Features
 
-* ⚡ **Super Rápido:** SSR com Vercel Edge Functions, Hono e Handlebars pré-compilado. O resultado são *cold starts* **9x mais rápidos** que funções serverless tradicionais e *warm starts* **2x mais rápidos**.
+* ⚡ **Super Rápido:** SSR com Vercel Edge Functions, Hono e Handlebars pré-compilado. O resultado é *cold starts* **9x menores** que funções serverless tradicionais e *warm starts* **2x mais rápidos**.
 * 💰 **Custo Quase Zero:** Projetado para funcionar com margem dentro dos planos gratuitos da Vercel e do Sanity. Seu único custo fixo é o domínio (~R$ 65/ano).
-* 🤖 **CMS Poderoso:** Sanity.io como um Headless CMS "all-code", totalmente customizável para modelar seu conteúdo como quiser.
-* ⚙️ **Builds Otimizados:** Usa Turborepo para cachear templates Handlebars e assets do Vite. 
+* ⚙️ **Builds Otimizados:** Usa Turborepo para cachear templates Handlebars e assets do Vite.]
+* 🤟🏻 **Ultilitários WebGPU (em desenvolvimento):** Eles vão facilitar animações com shaders em imagens ou textos, a ideia é algo tipo o threejs só que super minimalista e focado em imagens e textos. 
+* 🤖 **CMS:** Sanity.io como um Headless CMS "all-code".
 * 🛠️ **Stack Moderna:** TypeScript, Vite, SCSS, Handlebars no Front-end e Hono como Back-end 
 
 ## Instalação
@@ -251,8 +252,15 @@ Para ficar de olho no tamanho da sua função, rode `pnpm a` na raiz após um bu
 
 O projeto está sempre evoluindo. Algumas ideias para o futuro:
 
+Backend->
 * **Fetches Incrementais do Sanity:** Hoje, cada build busca todo o conteúdo. Uma otimização incrível seria buscar apenas os documentos alterados desde o último build, como um "git" do conteúdo. 
 * **Suporte ESM no Handlebars:** Assim que a biblioteca lançar suporte oficial a módulos ESM, o projeto será atualizado.
 * **Proxy reverso para urls do Sanity:** Atualmente, não há restrições nativas no Sanity para limitar parâmetros tipo ?w=99999, o que poderia permitir que alguem manipulasse os URLs e para solicitar imagens gigantes e queimar minha banda disponível. Seria interessante implementar um entrypoint que limite esses parâmetros pra evitar ataques.
+* **Migrar para Nunjucks** -> é mais poderoso e flexivel que handlebars
+
+Frontend->
+* **Montar helpers com webGPU** Agora to trabalhando em um site com OGL e, como proximo passo, quero traduzir os ultilitarios que estou montando pra ele para o WebGPU. A ideia é facilitar o uso de shaders em imagens e textos. A parte do webGPU é pelo desafio XD
+
+* **Criar shaders ultilitários** -> Com webGPU 
 
 Contribuições, issues e sugestões são muito bem-vindas!
