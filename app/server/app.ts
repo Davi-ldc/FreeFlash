@@ -3,16 +3,14 @@ import { Hono } from 'hono';
 // Para diminuir o cold start
 import contentData from '../content.json';
 
-//@ts-ignore não vou criar um arquivo de tipos só pra isso
+//@ts-ignore não vou criar um arquivo de tipos só pra importar esse js
 import templates from './precompiled-templates.js';
 const partials = { header: templates.header, footer: templates.footer};
 
 // Types
-import type { ColecaoAgrupada } from '../src/types/sanity';
+// import type { types } from '../src/types/sanity';
 import type { Base, Home } from '../src/types/pages';
 import type { Manifest } from 'vite';
-
-const content: ColecaoAgrupada[] = contentData as ColecaoAgrupada[];
 
 export interface AppConfig {
   isDev: boolean;
@@ -20,13 +18,19 @@ export interface AppConfig {
   viteCSS: string;
   manifest?: Manifest;
   vitePort?: number;
+  viteBaseUrl?: string; // URL completa do Vite em dev (ex: https://<codespace>-3000.app.github.dev)
 }
 
-function assetHelper(originalPath: string, isDev: boolean, manifest?: Manifest, vitePort?: number): string {
-  // Em DEV, retorna o caminho pro servidor Vite
+function assetHelper(originalPath: string, isDev: boolean, manifest?: Manifest, viteBaseUrl?: string): string {
+  // Em DEV, retorna o caminho pro servidor Vite (URL completa)
   if (isDev) {
-    if (!vitePort) {console.warn('faltou o vitePort no assetHelper'); return `/${originalPath}`;}
-    return `http://localhost:${vitePort}/${originalPath}`;
+    if (!viteBaseUrl) {
+      console.warn('faltou o viteBaseUrl no assetHelper');
+      return `/${originalPath}`;
+    }
+    const base = viteBaseUrl.replace(/\/+$/, '');
+    const path = String(originalPath).replace(/^\/+/, '');
+    return `${base}/${path}`;
   }
   
   // Fallback de segurança
@@ -45,7 +49,7 @@ function assetHelper(originalPath: string, isDev: boolean, manifest?: Manifest, 
 
 export function createApp(config: AppConfig) {
   const baseTemplateData: Base = {
-    site_title: 'Titulo',
+    site_title: 'Renato Vaz',
     charset: 'UTF-8',
     lang: 'pt-br',
     is_dev: config.isDev,
@@ -54,7 +58,7 @@ export function createApp(config: AppConfig) {
   };
 
   const helpers = {
-    asset: (path: string) => assetHelper(path, config.isDev, config.manifest, config.vitePort)
+    asset: (path: string) => assetHelper(path, config.isDev, config.manifest, config.viteBaseUrl)
   };
 
   const handlebarsConfig = { partials: partials, helpers: helpers };
@@ -63,9 +67,7 @@ export function createApp(config: AppConfig) {
 
   app.get('/', async (c) => {
     const data: Home = {
-      colecoes: content,
-      latest_year: content[0]?.ano ?? new Date().getFullYear(),
-      description: 'Descubra as coleções mais recentes e explore nosso conteúdo exclusivo',
+      description: "Renato Vaz, um olhar além das lentes",
       ...baseTemplateData
     };
 

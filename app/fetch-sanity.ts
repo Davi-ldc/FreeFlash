@@ -4,7 +4,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import imageUrlBuilder from '@sanity/image-url';
-import type { Colecao, ColecaoAgrupada, ColecaoFormatada } from './src/types/sanity';
+// import type { types } from './src/types/sanity';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,19 +31,13 @@ async function fetchContent() {
       titulo, "slug": slug.current, local, data, ano, "imagemPrincipal": imagemPrincipal.asset->{url}
     }`;
 
-    //array com coleções
-    const colecoesRaw: Colecao[] = await client.fetch(query)
-
-    const colecoes: Colecao[] = colecoesRaw.map((c) => ({
-      ...c,
-      //ao ?auto=format ele comprime pra avif, ou webp se o navegador não suportar avif
-      imagemPrincipal: { url: builder.image(c.imagemPrincipal.url).auto('format').url() }, 
-    }))
+    //Processa os dados aqui...
 
     const outputPath = path.resolve(__dirname, 'content.json')
     //o stringify converte um objeto js em string json
     // await fs.writeFile(outputPath, JSON.stringify(agrupadas , null, 2)) //pra debug
-    await fs.writeFile(outputPath, JSON.stringify(colecoes))
+    //dps salva em um content.json 
+    await fs.writeFile(outputPath, JSON.stringify(query))
 
     const elapsedTime = (performance.now() - time) / 1000;
     console.log(`Dados obtidos com sucesso em ${elapsedTime.toFixed(2)} segundos.`);

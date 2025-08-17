@@ -265,3 +265,7 @@ Frontend->
 * **Criar shaders ultilitários** -> Com webGPU 
 
 Contribuições, issues e sugestões são muito bem-vindas!
+
+## Observações sobre o github codespaces->
+
+Se tiver rodando nele lembra de deixar as portas como publicas e de abrir o navegado com cors desativado

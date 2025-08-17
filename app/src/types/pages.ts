@@ -1,5 +1,3 @@
-import type { ColecaoAgrupada } from './sanity'
-
 export interface Base {
   site_title: string
   description?: string
@@ -10,8 +8,7 @@ export interface Base {
   vite_css: string
 }
 
+//Ai você cria uma interface com as variaveis que cada página precisa
 export interface Home extends Base {
-  colecoes: ColecaoAgrupada[],
-  latest_year: number
 }
 
