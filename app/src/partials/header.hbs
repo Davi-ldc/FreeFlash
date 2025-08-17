@@ -6,12 +6,14 @@
 
   <title>{{site_title}}</title>
 
-  {{!-- <meta name="description" content=""> --}}
-  {{!-- <meta property="og:title" content="">
-  <meta property="og:description" content="">
-  {{!-- <meta property="og:image" content="">  --}}
-  {{!-- <meta property="og:url" content=""> --}}
-  <meta property="og:locale" content="pt_BR"> --}}
+  {{#if description}}
+    <meta name="description" content="{{description}}">
+    <meta property="og:description" content="{{description}}">
+  {{/if}}
+  <meta property="og:title" content="">
+  <meta property="og:image" content="">
+  <meta property="og:url" content="">
+  <meta property="og:locale" content="pt_BR">
 
   {{!-- <link rel="icon" href="{{asset 'src/assets/images/favicon.svg'}}" type="image/svg+xml">
   {{!-- <link rel="apple-touch-icon" href="{{asset 'src/assets/images/favicon-180x180.png'}}"> --}} --}}

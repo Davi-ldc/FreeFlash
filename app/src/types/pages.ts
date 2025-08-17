@@ -2,6 +2,7 @@ import type { ColecaoAgrupada } from './sanity'
 
 export interface Base {
   site_title: string
+  description?: string
   charset: string
   lang: string
   is_dev: boolean

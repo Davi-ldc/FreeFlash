@@ -257,6 +257,7 @@ Backend->
 * **Suporte ESM no Handlebars:** Assim que a biblioteca lançar suporte oficial a módulos ESM, o projeto será atualizado.
 * **Proxy reverso para urls do Sanity:** Atualmente, não há restrições nativas no Sanity para limitar parâmetros tipo ?w=99999, o que poderia permitir que alguem manipulasse os URLs e para solicitar imagens gigantes e queimar minha banda disponível. Seria interessante implementar um entrypoint que limite esses parâmetros pra evitar ataques.
 * **Migrar para Nunjucks** -> é mais poderoso e flexivel que handlebars
+* **Incluir assets no html** -> evita requests a mais
 
 Frontend->
 * **Montar helpers com webGPU** Agora to trabalhando em um site com OGL e, como proximo passo, quero traduzir os ultilitarios que estou montando pra ele para o WebGPU. A ideia é facilitar o uso de shaders em imagens e textos. A parte do webGPU é pelo desafio XD

@@ -65,6 +65,7 @@ export function createApp(config: AppConfig) {
     const data: Home = {
       colecoes: content,
       latest_year: content[0]?.ano ?? new Date().getFullYear(),
+      description: 'Descubra as coleções mais recentes e explore nosso conteúdo exclusivo',
       ...baseTemplateData
     };
 
