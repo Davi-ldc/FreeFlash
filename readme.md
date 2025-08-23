@@ -5,7 +5,7 @@ Uma dev stack opinativa, simples, rápida e com o menor curto de hospedagem poss
 
 * ⚡ **Super Rápido:** SSR com Vercel Edge Functions, Hono e Eta.js pré-compilado. O resultado é *cold starts* **9x menores** que funções serverless tradicionais e *warm starts* **2x mais rápidos**.
 * 💰 **Custo Quase Zero:** Projetado para funcionar com margem dentro dos planos gratuitos da Vercel e do Sanity. Seu único custo fixo é o domínio (~R$ 65/ano).
-* ⚙️ **Builds Otimizados:** Usa Turborepo para cachear templates Eta.js e assets do Vite. O bundle final pesa ✨ **11KB** ✨  (gziped)
+* ⚙️ **Builds Otimizados:** Usa Turborepo para cachear templates Eta.js e assets do Vite. O bundle final pesa ✨ **9.02KB** ✨  (gziped)
 * 🤟🏻 **Ultilitários WebGPU (em desenvolvimento):** Eles vão facilitar animações com shaders em imagens ou textos, a ideia é algo tipo o threejs só que super minimalista e focado em imagens e textos. 
 * 🤖 **CMS:** Sanity.io como um Headless CMS "all-code".
 * 🛠️ **Stack Moderna:** TypeScript, Vite, SCSS, Eta.js no Front-end e Hono como Back-end 

@@ -1,6 +1,6 @@
 // Arquivo gerado automaticamente. Não edite.
 export const compiledTemplates = {
-  'pages/home': function anonymous(it,options
+  '/pages/home': function anonymous(it,options
 ) {
 
 let include = (template, data) => this.render(template, data, options);
@@ -25,7 +25,7 @@ if (__eta.layout) {
 return __eta.res;
 
 },
-  'partials/header': function anonymous(it,options
+  '/partials/header': function anonymous(it,options
 ) {
 
 let include = (template, data) => this.render(template, data, options);
@@ -74,7 +74,7 @@ if (__eta.layout) {
 return __eta.res;
 
 },
-  'partials/footer': function anonymous(it,options
+  '/partials/footer': function anonymous(it,options
 ) {
 
 let include = (template, data) => this.render(template, data, options);
