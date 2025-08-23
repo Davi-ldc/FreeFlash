@@ -10,7 +10,7 @@
     "fetch:sanity": "tsx fetch-sanity.ts",
     "precompileTemplates": "tsx precompile-templates.ts",
     "dev:vite": "vite",
-    "dev:server": "pnpm precompileTemplates && tsx ./server/dev.ts",
+    "dev:server": "tsx ./server/dev.ts",
     "dev:watch:fetch-sanity": "nodemon --on-change-only --watch fetch-sanity.ts --exec \"pnpm fetch:sanity\"",
     "dev:watch:server": "nodemon --watch src/**/* --ext eta --watch server/**/* --ext ts --watch precompile-templates.ts --exec \"pnpm dev:server\"",
     "dev": "pnpm fetch:sanity && concurrently --kill-others -n FETCH,VITE,SERVE -c cyan,yellow,black \"pnpm:dev:watch:fetch-sanity\" \"pnpm:dev:vite\" \"pnpm:dev:watch:server\"",

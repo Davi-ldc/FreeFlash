@@ -22,11 +22,9 @@ async function precompileEtaTemplates() {
   const compiled: Record<string, string> = {};
 
   for (const file of templateFiles) {
-    const key = '@' + path
+    const key = '/' + path
       .relative('src', file)
       .replace(/\\/g, '/')
-      .replace(/^pages\//, 'page/')
-      .replace(/^partials\//, 'partial/')
       .replace(/\.eta$/, '');
 
     const source = readFileSync(path.join(__dirname, file), 'utf-8');

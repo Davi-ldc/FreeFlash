@@ -1,6 +1,6 @@
 // Arquivo gerado automaticamente. Não edite.
 export const compiledTemplates = {
-  '@page/home': function anonymous(it,options
+  'pages/home': function anonymous(it,options
 ) {
 
 let include = (template, data) => this.render(template, data, options);
@@ -13,9 +13,9 @@ function layout(path, data) {
   __eta.layoutData = data;
 }
 
-__eta.res+=include('@partial/header', it)
+__eta.res+=include('/partials/header', it)
 __eta.res+='\n<main id="sccont" class="main" data-scroll-container>\n  E ai? O que você vai construir?👀\n  '
-__eta.res+=include('@partial/footer', it)
+__eta.res+=include('/partials/footer', it)
 __eta.res+='</main>'
 
 if (__eta.layout) {
@@ -25,7 +25,7 @@ if (__eta.layout) {
 return __eta.res;
 
 },
-  '@partial/header': function anonymous(it,options
+  'partials/header': function anonymous(it,options
 ) {
 
 let include = (template, data) => this.render(template, data, options);
@@ -74,7 +74,7 @@ if (__eta.layout) {
 return __eta.res;
 
 },
-  '@partial/footer': function anonymous(it,options
+  'partials/footer': function anonymous(it,options
 ) {
 
 let include = (template, data) => this.render(template, data, options);

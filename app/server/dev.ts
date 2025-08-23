@@ -1,5 +1,8 @@
 import { serve } from '@hono/node-server';
 import { createApp } from './app';
+import { Eta } from 'eta';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { HONO_PORT } from './config/port';
 import { VITE_PORT } from './config/port';
@@ -10,13 +13,24 @@ const viteBaseUrl =
     ? `https://${CODESPACE_NAME}-${VITE_PORT}.${CODESPACES_PORT}`
     : `http://localhost:${VITE_PORT}`;
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const viewsDir = path.join(__dirname, '../src');
+
+const eta = new Eta({
+  varName: 'it',
+  views: viewsDir,
+  cache: false
+});
+
 const app = createApp({
   isDev: true,
   viteJS: `${viteBaseUrl}/src/main.ts`,
   viteCSS: '',
   vitePort: VITE_PORT,
   viteBaseUrl
-});
+}, eta);
 
 try {
   serve({

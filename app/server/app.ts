@@ -1,6 +1,4 @@
 import { Hono } from 'hono';
-import { Eta } from 'eta';
-
 import { compiledTemplates } from './precompiled-templates.js';
 import contentData from '../content.json';
 
@@ -8,6 +6,7 @@ import contentData from '../content.json';
 // import type { types } from '../src/types/sanity';
 import type { Base, Home } from '../src/types/pages';
 import type { Manifest } from 'vite';
+import type { Eta } from 'eta';
 
 export interface AppConfig {
   isDev: boolean;
@@ -46,7 +45,7 @@ function assetHelper(originalPath: string, isDev: boolean, manifest?: Manifest, 
   return `/${originalPath}`;
 }
 
-export function createApp(config: AppConfig) {
+export function createApp(config: AppConfig, eta: Eta) {
   const baseTemplateData: Base = {
     site_title: 'FreeFlash✨',
     charset: 'UTF-8',
@@ -55,11 +54,6 @@ export function createApp(config: AppConfig) {
     vite_js: config.viteJS,
     vite_css: config.viteCSS
   };
-
-  const eta = new Eta({ varName: 'it' });
-  for (const name in compiledTemplates) {
-    eta.loadTemplate(name, compiledTemplates[name]);
-  }
 
   const helpers = {
     asset: (path: string) => assetHelper(path, config.isDev, config.manifest, config.viteBaseUrl)
@@ -74,8 +68,7 @@ export function createApp(config: AppConfig) {
       ...helpers
     };
 
-    // Renderiza pelo nome do template
-    const html = eta.render('@page/home', data) as string;
+    const html = eta.render('/pages/home', data) as string; // <-- A SOLUÇÃO! Adiciona a barra inicial.
     return c.html(html);
   });
 
