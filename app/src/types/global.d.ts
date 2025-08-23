@@ -3,8 +3,10 @@ declare module '*.glsl?raw' {
   export default content;
 }
 
-declare module '*.hbs' {
+declare module '*.eta' {
   const content: string;
   export default content;
 }
+
+declare module '*.js';
 

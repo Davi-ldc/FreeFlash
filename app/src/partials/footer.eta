@@ -1,0 +1,6 @@
+<footer class="footer">
+
+</footer>
+<script type="module" src="<%= it.vite_js %>"></script>
+</body>
+</html>

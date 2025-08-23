@@ -1,11 +1,8 @@
 import { Hono } from 'hono';
+import { Eta } from 'eta';
 
-// Para diminuir o cold start
+import { compiledTemplates } from './precompiled-templates.js';
 import contentData from '../content.json';
-
-//@ts-ignore não vou criar um arquivo de tipos só pra importar esse js
-import templates from './precompiled-templates.js';
-const partials = { header: templates.header, footer: templates.footer};
 
 // Types
 // import type { types } from '../src/types/sanity';
@@ -22,7 +19,7 @@ export interface AppConfig {
 }
 
 function assetHelper(originalPath: string, isDev: boolean, manifest?: Manifest, viteBaseUrl?: string): string {
-  // Em DEV, retorna o caminho pro servidor Vite (URL completa)
+  // Em DEV -> servidor Vite
   if (isDev) {
     if (!viteBaseUrl) {
       console.warn('faltou o viteBaseUrl no assetHelper');
@@ -35,9 +32,11 @@ function assetHelper(originalPath: string, isDev: boolean, manifest?: Manifest, 
   
   // Fallback de segurança
   if (!manifest) {
+    console.warn('faltou o manifest no assetHelper');
     return `/${originalPath}`;
   }
 
+  //Em prod lê o manifest e retorna o caminho para o arquivo hasheado
   const manifestKey = originalPath; // O manifest do Vite usa o caminho a partir da raiz como chave.
   if (manifest[manifestKey]) {
     return `/${manifest[manifestKey].file}`;
@@ -49,7 +48,7 @@ function assetHelper(originalPath: string, isDev: boolean, manifest?: Manifest, 
 
 export function createApp(config: AppConfig) {
   const baseTemplateData: Base = {
-    site_title: 'Renato Vaz',
+    site_title: 'FreeFlash✨',
     charset: 'UTF-8',
     lang: 'pt-br',
     is_dev: config.isDev,
@@ -57,30 +56,36 @@ export function createApp(config: AppConfig) {
     vite_css: config.viteCSS
   };
 
+  const eta = new Eta({ varName: 'it' });
+  for (const name in compiledTemplates) {
+    eta.loadTemplate(name, compiledTemplates[name]);
+  }
+
   const helpers = {
     asset: (path: string) => assetHelper(path, config.isDev, config.manifest, config.viteBaseUrl)
   };
 
-  const handlebarsConfig = { partials: partials, helpers: helpers };
-
   const app = new Hono();
 
-  app.get('/', async (c) => {
+  app.get('/', (c) => {
     const data: Home = {
-      description: "Renato Vaz, um olhar além das lentes",
-      ...baseTemplateData
+      description: 'Renato Vaz, um olhar além das lentes',
+      ...baseTemplateData,
+      ...helpers
     };
 
-    const html = templates.home(data, handlebarsConfig);
-
+    // Renderiza pelo nome do template
+    const html = eta.render('@page/home', data) as string;
     return c.html(html);
   });
 
   // app.get('/sobre', async (c) => {
   //   const data = {
-  //     ...baseTemplateData
+  //     ...baseTemplateData,
+  //     ...helpers
   //   };
 
+  //   const html = eta.render('@pages/home', data) as string;
   //   return c.html(html);
   // });
 

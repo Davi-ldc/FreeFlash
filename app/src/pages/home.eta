@@ -1,0 +1,6 @@
+<%~ include('@partial/header', it) %>
+
+<main id="sccont" class="main" data-scroll-container>
+  E ai? O que você vai construir?👀
+  <%~ include('@partial/footer', it) %>
+</main>

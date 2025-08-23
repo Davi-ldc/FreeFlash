@@ -4,11 +4,10 @@ import { createApp } from './app';
 import { HONO_PORT } from './config/port';
 import { VITE_PORT } from './config/port';
 
-// Descobre a URL pública do Vite no Codespaces, senão usa localhost
-const { CODESPACE_NAME, GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN } = process.env as Record<string, string | undefined>;
+const { CODESPACE_NAME, CODESPACES_PORT } = process.env as Record<string, string | undefined>;
 const viteBaseUrl =
-  CODESPACE_NAME && GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN
-    ? `https://${CODESPACE_NAME}-${VITE_PORT}.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`
+  CODESPACE_NAME && CODESPACES_PORT
+    ? `https://${CODESPACE_NAME}-${VITE_PORT}.${CODESPACES_PORT}`
     : `http://localhost:${VITE_PORT}`;
 
 const app = createApp({

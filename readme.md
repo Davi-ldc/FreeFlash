@@ -3,12 +3,12 @@ Uma dev stack opinativa, simples, rápida e com o menor curto de hospedagem poss
 
 ## Features
 
-* ⚡ **Super Rápido:** SSR com Vercel Edge Functions, Hono e Handlebars pré-compilado. O resultado é *cold starts* **9x menores** que funções serverless tradicionais e *warm starts* **2x mais rápidos**.
+* ⚡ **Super Rápido:** SSR com Vercel Edge Functions, Hono e Eta.js pré-compilado. O resultado é *cold starts* **9x menores** que funções serverless tradicionais e *warm starts* **2x mais rápidos**.
 * 💰 **Custo Quase Zero:** Projetado para funcionar com margem dentro dos planos gratuitos da Vercel e do Sanity. Seu único custo fixo é o domínio (~R$ 65/ano).
-* ⚙️ **Builds Otimizados:** Usa Turborepo para cachear templates Handlebars e assets do Vite.]
+* ⚙️ **Builds Otimizados:** Usa Turborepo para cachear templates Eta.js e assets do Vite. O bundle final pesa ✨ **11KB** ✨  (gziped)
 * 🤟🏻 **Ultilitários WebGPU (em desenvolvimento):** Eles vão facilitar animações com shaders em imagens ou textos, a ideia é algo tipo o threejs só que super minimalista e focado em imagens e textos. 
 * 🤖 **CMS:** Sanity.io como um Headless CMS "all-code".
-* 🛠️ **Stack Moderna:** TypeScript, Vite, SCSS, Handlebars no Front-end e Hono como Back-end 
+* 🛠️ **Stack Moderna:** TypeScript, Vite, SCSS, Eta.js no Front-end e Hono como Back-end 
 
 ## Instalação
 
@@ -99,7 +99,7 @@ São 4 tarefas cacheadas pelo turborepo:
 
 - `build:vite (cacheado)` → Compila o SCSS e TS e processa os assets otimizando eles com um hash.
 - `fetch:sanity (sem cache)` → Lê todos os dados do CMS, preprocessa eles e salva em um `content.json`.
-- `precompileTemplates (cacheado)` → Transforma os templates Handlebars em funções JavaScript.
+- `precompileTemplates (cacheado)` → Transforma os templates Eta.js em funções JavaScript.
 - `build` → Esse é mais complexo:
   - Primeiro compilamos index.ts com tsup para `vercel/output/functions/index.func/`, no formato:
     - **CommonJS (.cjs)** para Node
@@ -151,15 +151,15 @@ No final fica assim:
 
 ## Desenvolvimento
 - Em dev, a gente roda fetch, Vite e o servidor em paralelo, tudo monitorado com Nodemon, usando concurrently. 
-- Aí o Hono renderiza os `.hbs` com base nos dados tipados em: `app\types\pages.ts` e o Vite serve o TypeScript e o scss em `http://localhost:${vitePort}/src/main.ts`. 
+- Aí o Hono renderiza os `.eta` com base nos dados tipados em: `app\types\pages.ts` e o Vite serve o TypeScript e o scss em `http://localhost:${vitePort}/src/main.ts`. 
 - repara que a lógica do servidor ta em `server/app.ts`, ai tem um entrypoint pro vercel `server/index.ts` e um arquivo pra dev `server/dev.ts`. Isso por que, no bundle final eu não posso importar @hono/node-server por causa das limitações de edge runtime, nem se o import estiver em um if
 - No TypeScript do front, a gente importa o SCSS e o Vite injeta ele no browser. Para compilar o servidor eu estou usando o `tsx` 
 
 ## Processamento de Assets  
 
 Toda ideia do projeto é ser o mais otimizado possivel, então para poder usar um hash agressivo 
-em tudo (incluindo as imagens) temos um helper `assetHelper` no handlebars usado assim:
-{{asset 'src/assets/images/favicon.svg'}} em dev ele manda para `http://localhost:${vitePort}/${originalPath}` e em build usa o manifest: `/${manifest[manifestKey].file}`;
+em tudo (incluindo as imagens) temos um helper `asset`, disponível na variável `it`, usado assim:
+`<%= it.asset('src/assets/images/favicon.svg') %>` em dev ele manda para `http://localhost:${vitePort}/${originalPath}` e em build usa o manifest: `/${manifest[manifestKey].file}`;
 
 #### Sobre o runtime: 
 
@@ -240,7 +240,7 @@ Como o Vite gera arquivos com hash (ex: `main.BSI2MmxF.js`), instruímos a CDN d
 
 #### Otimização de Imagens
 
-Um helper do Handlebars, `{{asset 'path/to/image.svg'}}`, resolve o caminho das imagens. Em modo `dev`, aponta para o servidor do Vite. Em `build`, usa o `manifest.json` para apontar para o arquivo com hash, garantindo que as imagens também se beneficiem do cache de longa duração.
+Um helper, `it.asset('path/to/image.svg')`, resolve o caminho das imagens. Em modo `dev`, aponta para o servidor do Vite. Em `build`, usa o `manifest.json` para apontar para o arquivo com hash, garantindo que as imagens também se beneficiem do cache.
 
 #### Análise do Bundle
 
@@ -254,9 +254,8 @@ O projeto está sempre evoluindo. Algumas ideias para o futuro:
 
 Backend->
 * **Fetches Incrementais do Sanity:** Hoje, cada build busca todo o conteúdo. Uma otimização incrível seria buscar apenas os documentos alterados desde o último build, como um "git" do conteúdo. 
-* **Suporte ESM no Handlebars:** Assim que a biblioteca lançar suporte oficial a módulos ESM, o projeto será atualizado.
 * **Proxy reverso para urls do Sanity:** Atualmente, não há restrições nativas no Sanity para limitar parâmetros tipo ?w=99999, o que poderia permitir que alguem manipulasse os URLs e para solicitar imagens gigantes e queimar minha banda disponível. Seria interessante implementar um entrypoint que limite esses parâmetros pra evitar ataques.
-* **Migrar para Nunjucks** -> é mais poderoso e flexivel que handlebars
+* **Melhor suporte para github codespaces:** Já funciona mas falta garantir suporte para que o vite consiga importar as fontes
 
 Frontend->
 * **Montar helpers com webGPU** Agora to trabalhando em um site com OGL e, como proximo passo, quero traduzir os ultilitarios que estou montando pra ele para o WebGPU. A ideia é facilitar o uso de shaders em imagens e textos. A parte do webGPU é pelo desafio XD

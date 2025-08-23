@@ -1,59 +1,56 @@
-import { execSync } from 'child_process';
-import { readFileSync, writeFileSync } from 'fs';
+import { Eta } from 'eta';
+import { glob } from 'glob';
+import { writeFileSync, readFileSync } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-console.log('🔨 Compilando templates...');
+async function precompileEtaTemplates() {
+  console.log('🔨 Precompilando templates Eta...');
 
-// Compila templates 
-execSync(
-    'handlebars src/pages src/partials -f server/precompiled-templates.js -e hbs',
-    { stdio: 'inherit' }
-);
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const viewsDir = path.join(__dirname, 'src');
 
-const convertHandlebarsToESM = (inputFile: string): void => {
-  try {
-    console.log(`🔄 Convertendo ${inputFile} para ESM...`);
-    
-    // Lê o arquivo original
-    const content = readFileSync(inputFile, 'utf-8');
-    
-    // Verifica se já está em formato ESM
-    if (content.includes('export default')) {
-      console.log('✅ Arquivo já está em formato ESM!');
-      return;
-    }
-    
-    // Extrai apenas o conteúdo dentro da IIFE
-    const iifeMatch = content.match(/^\(function\(\) \{[\s\S]*var template = Handlebars\.template, templates = Handlebars\.templates = Handlebars\.templates \|\| \{\};([\s\S]*?)\}\)\(\);?\s*$/);
-    
-    if (!iifeMatch) {
-      console.error('❌ Não foi possível encontrar o padrão IIFE esperado');
-      process.exit(1);
-    }
-    
-    // Extrai o conteúdo dos templates
-    const templatesContent = iifeMatch[1].trim();
-    
-    // Constrói o novo arquivo ESM
-    const esmContent = `import Handlebars from "handlebars/runtime";
+  const eta = new Eta({ views: viewsDir, varName: 'it' });
 
-const template = Handlebars.template;
-const templates = {};
-
-${templatesContent}
-
-export default templates;
-`;
-    
-    // Escreve o arquivo convertido
-    writeFileSync(inputFile, esmContent, 'utf-8');
-    
-  } catch (error) {
-    console.error('❌ Erro durante a conversão:', error);
-    console.error('Conteúdo do arquivo:', error instanceof Error ? error.message : 'Erro desconhecido');
-    process.exit(1);
+  const templateFiles = await glob('src/{pages,partials}/**/*.eta', { cwd: __dirname });
+  if (!templateFiles.length) {
+    console.warn('⚠️ Nenhum template .eta encontrado.');
+    return;
   }
+
+  const compiled: Record<string, string> = {};
+
+  for (const file of templateFiles) {
+    const key = '@' + path
+      .relative('src', file)
+      .replace(/\\/g, '/')
+      .replace(/^pages\//, 'page/')
+      .replace(/^partials\//, 'partial/')
+      .replace(/\.eta$/, '');
+
+    const source = readFileSync(path.join(__dirname, file), 'utf-8');
+    const fn = eta.compile(source); // function anonymous(it,options)
+    compiled[key] = fn.toString();
+  }
+
+  // Gera o conteúdo do objeto de templates como uma string
+  const templatesObjectString = Object.entries(compiled)
+    .map(([key, fnString]) => `  '${key}': ${fnString}`)
+    .join(',\n');
+
+  // Gera o arquivo runtime apenas com os templates compilados
+  const out = `// Arquivo gerado automaticamente. Não edite.
+export const compiledTemplates = {
+${templatesObjectString}
 };
+`;
 
-convertHandlebarsToESM('./server/precompiled-templates.js');
+  writeFileSync(path.join(__dirname, 'server/precompiled-templates.js'), out, 'utf-8');
+  console.log(`✅ ${templateFiles.length} templates compilados → ./server/precompiled-templates.js`);
+}
 
-console.log('✅ Templates compilados e convertidos para ESM!');
+precompileEtaTemplates().catch(e => {
+  console.error('❌ Erro ao pré-compilar templates:', e);
+  process.exit(1);
+});

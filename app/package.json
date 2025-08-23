@@ -12,7 +12,7 @@
     "dev:vite": "vite",
     "dev:server": "pnpm precompileTemplates && tsx ./server/dev.ts",
     "dev:watch:fetch-sanity": "nodemon --on-change-only --watch fetch-sanity.ts --exec \"pnpm fetch:sanity\"",
-    "dev:watch:server": "nodemon --watch src/**/* --ext hbs --watch server/**/* --watch precompile-templates.ts --exec \"pnpm dev:server\"",
+    "dev:watch:server": "nodemon --watch src/**/* --ext eta --watch server/**/* --ext ts --watch precompile-templates.ts --exec \"pnpm dev:server\"",
     "dev": "pnpm fetch:sanity && concurrently --kill-others -n FETCH,VITE,SERVE -c cyan,yellow,black \"pnpm:dev:watch:fetch-sanity\" \"pnpm:dev:vite\" \"pnpm:dev:watch:server\"",
     "build:vite": "vite build",
     "build": "tsup server/index.ts && shx cp server/config/.vc-config.json .vercel/output/functions/index.func/ && shx cp server/config/vercel.config.json .vercel/output/config.json"
@@ -32,12 +32,12 @@
   "dependencies": {
     "@sanity/client": "^6.22.2",
     "@sanity/image-url": "^1.1.0",
+    "eta": "^3.5.0",
+    "glob": "^11.0.3",
     "gsap": "^3.13.0",
-    "handlebars": "^4.7.8",
     "hono": "^4.8.5",
     "locomotive-scroll": "^4.1.4",
     "ogl": "^1.0.11",
-    "replace-in-file": "^8.3.0",
     "shx": "^0.4.0",
     "tsup": "^8.5.0"
   }

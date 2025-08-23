@@ -16,9 +16,6 @@ const client = createClient({
   apiVersion: '2024-05-01',
 });
 
-//Constants
-const LIMIT_BY_YEAR = 3;
-
 const builder = imageUrlBuilder(client);
 
 async function fetchContent() {
@@ -49,4 +46,4 @@ async function fetchContent() {
   }
 }
 
-fetchContent();
+// fetchContent();

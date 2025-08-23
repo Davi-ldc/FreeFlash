@@ -7,7 +7,7 @@ export default defineConfig({
   outDir: '.vercel/output/functions/index.func',
   clean: true,// Limpa a pasta dist antes de gerar o novo bundle  
   // metafile: true,  // legal pra ver o peso de cada arquivo no bundle
-  noExternal: ['hono', 'handlebars/runtime'],
+  noExternal: ['hono', 'eta'],
   loader: {
     '.hbs': 'text',
   },
