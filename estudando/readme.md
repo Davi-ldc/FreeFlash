@@ -1,1 +1,0 @@
-Fiquei 1 ano estudando houdini e codando em cpp antes desse projeto então vale a pena revisar os conceitos básicos (até por que to usando TS POO OGL Shaders Hono...)

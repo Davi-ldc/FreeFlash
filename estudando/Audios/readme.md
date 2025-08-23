@@ -1,3 +1,0 @@
-Boa parte do meu estudo foi orientado pelo: [NotebookLM](https://notebooklm.google.com/), ferramenta que eu conheci graças a uma palestra do [Gustavo Guanabara](https://www.cursoemvideo.com/) na [Campus Party Brasília em 2025](https://brasil.campus-party.org/cpbr17/).
-
-Os áudios desta pasta são gerados pela ferramenta para resumir minhas anotações com base em várias fontes que achei online. No meu ponto de vista o melhor jeito de revisar essas anotações é ler o MD com calma, e depois quando você tiver atoa, da uma olhada no audio pra relembrar. Ele seguem a risca as anotações e, apesar de ter alguns errinhos, é legal pra revisar no caminho da escola :D
