@@ -5,7 +5,7 @@ Uma dev stack opinativa, simples, rápida e com o menor curto de hospedagem poss
 
 * ⚡ **Super Rápido:** SSR com Vercel Edge Functions, Hono e Eta.js pré-compilado. O resultado é *cold starts* **9x menores** que funções serverless tradicionais e *warm starts* **2x mais rápidos**.
 * 💰 **Custo Quase Zero:** Projetado para funcionar com margem dentro dos planos gratuitos da Vercel e do Sanity. Seu único custo fixo é o domínio (~R$ 65/ano).
-* ⚙️ **Builds Otimizados:** Usa Turborepo para cachear templates Eta.js e assets do Vite. O bundle final pesa ✨ **9.02KB** ✨  (gziped)
+* ⚙️ **Builds Otimizados:** Usa Turborepo para cachear templates Eta.js e assets do Vite. O bundle final pesa incríveis ✨ **9.02KB** ✨  (gziped)
 * 🤟🏻 **Ultilitários WebGPU (em desenvolvimento):** Eles vão facilitar animações com shaders em imagens ou textos, a ideia é algo tipo o threejs só que super minimalista e focado em imagens e textos. 
 * 🤖 **CMS:** Sanity.io como um Headless CMS "all-code".
 * 🛠️ **Stack Moderna:** TypeScript, Vite, SCSS, Eta.js no Front-end e Hono como Back-end 
@@ -233,20 +233,6 @@ Altere o arquivo `/server/config/.vc-config.json` de:
 para:
 `{ "runtime": "nodejs22.x", "handler": "index.cjs" }`
 E no `tsup.config.ts`, mude `format: 'esm'` para `format: 'cjs'`.
-
-#### Cache Agressivo de Assets
-
-Como o Vite gera arquivos com hash (ex: `main.BSI2MmxF.js`), instruímos a CDN da Vercel e os navegadores a fazer cache desses arquivos por um ano (`cache-control: public, max-age=31536000, immutable`). Isso reduz drasticamente as requisições ao servidor.
-
-#### Otimização de Imagens
-
-Um helper, `it.asset('path/to/image.svg')`, resolve o caminho das imagens. Em modo `dev`, aponta para o servidor do Vite. Em `build`, usa o `manifest.json` para apontar para o arquivo com hash, garantindo que as imagens também se beneficiem do cache.
-
-#### Análise do Bundle
-
-Para ficar de olho no tamanho da sua função, rode `pnpm a` na raiz após um build. Em meus testes, mesmo com um JSON de 5MB do CMS, a função ficou com 656KB, bem abaixo do limite de 1MB.
-
-
 
 ## Roadmap e Contribuições
 
