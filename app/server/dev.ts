@@ -7,11 +7,10 @@ import { fileURLToPath } from 'url';
 import { HONO_PORT } from './config/port';
 import { VITE_PORT } from './config/port';
 
-const { CODESPACE_NAME, CODESPACES_PORT } = process.env as Record<string, string | undefined>;
-const viteBaseUrl =
-  CODESPACE_NAME && CODESPACES_PORT
-    ? `https://${CODESPACE_NAME}-${VITE_PORT}.${CODESPACES_PORT}`
-    : `http://localhost:${VITE_PORT}`;
+const { CODESPACE_NAME } = process.env as Record<string, string | undefined>;
+const viteBaseUrl = CODESPACE_NAME 
+  ? `https://${CODESPACE_NAME}-${VITE_PORT}.app.github.dev`
+  : `http://localhost:${VITE_PORT}`;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
