@@ -1,4 +1,3 @@
-// app/vite.config.ts
 import { defineConfig } from 'vite'
 import path from 'path'
 import { VITE_PORT } from './server/config/port';
