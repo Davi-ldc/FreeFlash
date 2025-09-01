@@ -6,10 +6,26 @@ const port = VITE_PORT;
 
 export default defineConfig({
   root: '.',
+  plugins: [
+    {
+      name: 'eta-watcher',
+      handleHotUpdate({ file, server }) {
+        if (file.endsWith('.eta')) {
+          console.log(`🔄 Template alterado: ${path.basename(file)}`);
+          server.ws.send({
+            type: 'full-reload',
+            path: '*'
+          });
+          return [];
+        }
+      }
+    }
+  ],
   server: {
     port: port,
-    //se não ele vai responder como se os assets estivessem em localhost:honoPort/
-    origin: `http://localhost:${port}`
+    //sem isso ele vai responder como se os assets estivessem em localhost:honoPort/
+    origin: `http://localhost:${port}`,
+    cors: true,//Por causa do codespaces,
   },
   build: {
     outDir: '.vercel/output/static',

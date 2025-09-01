@@ -242,7 +242,6 @@ Backend->
 * **Fetches Incrementais do Sanity:** Hoje, cada build busca todo o conteúdo. Uma otimização incrível seria buscar apenas os documentos alterados desde o último build, como um "git" do conteúdo. 
 * **Proxy reverso para urls do Sanity:** Atualmente, não há restrições nativas no Sanity para limitar parâmetros tipo ?w=99999, o que poderia permitir que alguem manipulasse os URLs e para solicitar imagens gigantes e queimar minha banda disponível. Seria interessante implementar um entrypoint que limite esses parâmetros pra evitar ataques.
 * **Melhor suporte para github codespaces:** Já funciona mas falta garantir suporte para que o vite consiga importar as fontes
-* **Implementar HMR ao alterar um .eta**
 
 Frontend->
 * **Montar helpers com webGPU** Agora to trabalhando em um site com OGL e, como proximo passo, quero traduzir os ultilitarios que estou montando pra ele para o WebGPU. A ideia é facilitar o uso de shaders em imagens e textos. A parte do webGPU é pelo desafio XD
