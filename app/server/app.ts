@@ -14,7 +14,7 @@ export interface AppConfig {
   viteCSS: string;
   manifest?: Manifest;
   vitePort?: number;
-  viteBaseUrl?: string; // URL completa do Vite em dev (ex: https://<codespace>-3000.app.github.dev)
+  viteBaseUrl?: string;
 }
 
 function assetHelper(originalPath: string, isDev: boolean, manifest?: Manifest, viteBaseUrl?: string): string {
@@ -68,7 +68,7 @@ export function createApp(config: AppConfig, eta: Eta) {
       ...helpers
     };
 
-    const html = eta.render('/pages/home', data) as string; // <-- A SOLUÇÃO! Adiciona a barra inicial.
+    const html = eta.render('/pages/home', data) as string;
     return c.html(html);
   });
 
