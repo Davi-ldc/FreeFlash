@@ -8,13 +8,12 @@
     "dev:sanity": "pnpm --filter=cms dev",
     "dev:app": "pnpm --filter=app dev",
     "dev": "concurrently --names \"CMS,APP\" -c \"bgBlue.bold,bgGreen.bold\" \"pnpm dev:sanity\" \"pnpm dev:app\"",
-
     "build": "pnpm turbo run build --filter=app",
-
-    "a" : "pnpm --filter=app analyze"
+    "a": "pnpm --filter=app analyze"
   },
   "dependencies": {
-    "@sanity/client": "^7.6.0"
+    "@sanity/client": "^7.6.0",
+    "vercel": "^46.1.1"
   },
   "devDependencies": {
     "concurrently": "^9.2.0",
