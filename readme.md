@@ -127,7 +127,7 @@ No final fica assim:
   "version": 3,
   "routes": [
     {
-      "src": "/assets/(.*)", 
+      "src": "/assets/(.*)",
       // Como estamos usando vite para preprocessar os assets os arquivos são imutaveis e
       // a CDN ou o próprio navegador podem fazer cache deles por 1 ano (31536000 segundos)
       "headers": {
@@ -140,8 +140,8 @@ No final fica assim:
       "handle": "filesystem"
     },
     {
-      // Qualquer rota que não tenha sido resolvida com arquivos físicos vai para /index
-      "src": "/(.*)",
+      // Qualquer rota que não seja /api/* e não tenha sido resolvida com arquivos físicos vai para /index
+      "src": "/((?!api/).*)",
       "dest": "/index"
     }
   ]
