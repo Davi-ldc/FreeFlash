@@ -207,33 +207,6 @@ No `tsup.config.ts` → format: `'cjs'` vira `'esm'`
 * Mesmo com um JSON de 5MB minificado, ainda sobraram 368KB. A função estava pesando 656KB.
 * Mesmo que você mude o servidor, esse projeto suporta um CMS de até 5MB tranquilo. Daí pra frente, dependendo da lógica adicional que você implementar no Hono, talvez seja melhor mudar para serverless.
 
-
-### Otimizações de Performance
-
-#### Edge Runtime por Padrão
-
-O projeto foi feito para rodar no Edge, o que garante latência mínima.
-
-| Runtime               | Mediana (p50) | p95   | p99   |
-| --------------------- | ------------- | ----- | ----- |
-| Serverless Cold Start | 859 ms        | 1.046 | 1.156 |
-| Serverless Warm       | 246 ms        | 563   | 855   |
-| **Edge** | **106 ms** | **178** | **328** |
-
-*Fonte: [OpenStatus](https://www.openstatus.dev/blog/monitoring-latency-vercel-edge-vs-serverless). p99 representa o 1% das requisições mais lentas.*
-
-**Limitações do Edge:**
-* **Tamanho:** A função não pode passar de 1 MB (comprimida).
-* **Memória:** Limite fixo de 128 MB.
-* **Sistema de Arquivos:** Não há acesso a `fs` (File System).
-
-**Como mudar para Node.js:**
-Altere o arquivo `/server/config/.vc-config.json` de:
-`{ "runtime": "edge", "entrypoint": "index.js" }`
-para:
-`{ "runtime": "nodejs22.x", "handler": "index.cjs" }`
-E no `tsup.config.ts`, mude `format: 'esm'` para `format: 'cjs'`.
-
 ## Roadmap e Contribuições
 
 O projeto está sempre evoluindo. Algumas ideias para o futuro:
