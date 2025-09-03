@@ -15,6 +15,7 @@
     "*.ts",
     "src/types/*",
     "server/**/*",
+    "api/**/*"
   ],
   "exclude": [
     "node_modules",

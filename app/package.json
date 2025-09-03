@@ -12,7 +12,7 @@
     "dev:vite": "vite",
     "dev:server": "tsx ./server/dev.ts",
     "dev:watch:fetch-sanity": "nodemon --on-change-only --watch fetch-sanity.ts --exec \"pnpm fetch:sanity\"",
-    "dev:watch:server": "nodemon --watch server/**/* --ext ts --watch precompile-templates.ts --exec \"pnpm dev:server\"",
+    "dev:watch:server": "nodemon --watch server --watch api --watch precompile-templates.ts --ext ts --exec \"pnpm dev:server\"",
     "dev": "pnpm fetch:sanity && concurrently --kill-others -n FETCH,VITE,SERVE -c cyan,yellow,black \"pnpm:dev:watch:fetch-sanity\" \"pnpm:dev:vite\" \"pnpm:dev:watch:server\"",
     "build:vite": "vite build",
     "build": "tsup server/index.ts && shx cp server/config/.vc-config.json .vercel/output/functions/index.func/ && shx cp server/config/vercel.config.json .vercel/output/config.json"
@@ -38,6 +38,7 @@
     "hono": "^4.8.5",
     "locomotive-scroll": "^4.1.4",
     "ogl": "^1.0.11",
+    "resend": "^6.0.2",
     "shx": "^0.4.0",
     "tsup": "^8.5.0"
   }

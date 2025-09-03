@@ -2,7 +2,8 @@ import { serve } from '@hono/node-server';
 import { createApp } from './app';
 import { Eta } from 'eta';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
+import fs from 'fs';               // <-- adicionado
 
 import { HONO_PORT } from './config/port';
 import { VITE_PORT } from './config/port';
@@ -15,29 +16,84 @@ const viteBaseUrl = CODESPACE_NAME
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const viewsDir = path.join(__dirname, '../src');
+async function DevApis(root: any) {
+  const apiDir = path.join(__dirname, '../api');
+  if (!fs.existsSync(apiDir)) {
+    console.warn('[API] diretório /api não encontrado');
+    return;
+  }
+  const files = fs.readdirSync(apiDir);
 
-const eta = new Eta({
-  varName: 'it',
-  views: viewsDir,
-  cache: false
-});
+  const discovered: string[] = [];
 
-const app = createApp({
-  isDev: true,
-  viteJS: `${viteBaseUrl}/src/main.ts`,
-  viteCSS: '',
-  vitePort: VITE_PORT,
-  viteBaseUrl
-}, eta);
+  for (const file of files) {
+    if (!/\.(ts|js|mjs|cjs)$/.test(file)) continue;
+    const fullPath = path.join(apiDir, file);
+    try {
+      const mod = await import(pathToFileURL(fullPath).href);
+      const sub = mod.default;
+      if (sub) {
+        root.route('/', sub);
+        if (Array.isArray((sub as any).routes)) {
+          //pra cada rota
+          for (const r of (sub as any).routes) {
+            const methods = Array.isArray(r.method) ? r.method : [r.method || 'ANY'];
+            //Olha os métodos
+            for (const m of methods) {
+              discovered.push(`${(m || 'ANY')} ${r.path}`);
+            }
+          }
+        }
+        console.log('[API] montada:', file);
+      } else {
+        console.warn('[API] ignorada (sem export default app):', file);
+      }
+    } catch (e) {
+      console.error('[API] erro ao importar', file, e);
+    }
+  }
 
-try {
-  serve({
-    fetch: app.fetch,
-    port: HONO_PORT,
-  });
-  console.log(`🚀 Página principal rodando em \x1b[36mhttp://localhost:\x1b[1m${HONO_PORT}\x1b[0m`);
-  console.log(`🔌 Vite dev em: ${viteBaseUrl}`);
-} catch (error) {
-  console.error('❌ Erro ao iniciar o servidor:', error);
+  if (discovered.length) {
+    const list = discovered
+      .sort((a, b) => a.localeCompare(b))
+      .map(l => '  - ' + l)
+      .join('\n');
+    console.log('APIs disponíveis:\n' + list);
+  } else {
+    console.log('Nenhuma rota de API encontrada.');
+  }
 }
+
+(async () => {
+  const viewsDir = path.join(__dirname, '../src');
+  const eta = new Eta({
+    varName: 'it',
+    views: viewsDir,
+    cache: false
+  });
+
+  const viteBaseUrl = CODESPACE_NAME 
+    ? `https://${CODESPACE_NAME}-${VITE_PORT}.app.github.dev`
+    : `http://localhost:${VITE_PORT}`;
+
+  const app = createApp({
+    isDev: true,
+    viteJS: `${viteBaseUrl}/src/main.ts`,
+    viteCSS: '',
+    vitePort: VITE_PORT,
+    viteBaseUrl
+  }, eta);
+
+  await DevApis(app);
+
+  try {
+    serve({
+      fetch: app.fetch,
+      port: HONO_PORT,
+    });
+    console.log(`🚀 Página principal rodando em \x1b[36mhttp://localhost:\x1b[1m${HONO_PORT}\x1b[0m`);
+    console.log(`🔌 Vite dev em: ${viteBaseUrl}`);
+  } catch (error) {
+    console.error('❌ Erro ao iniciar o servidor:', error);
+  }
+})();
