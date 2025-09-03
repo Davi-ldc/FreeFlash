@@ -12,6 +12,12 @@ Uma dev stack opinativa, simples, rápida e com o menor curto de hospedagem poss
 
 ## Instalação
 
+```bash
+git clone https://github.com/Davi-ldc/FreeFlash.git
+cd FreeFlash
+cd app
+```
+
 Em `/cms` crie um novo projeto Sanity.
 ```bash
 cd cms
@@ -21,7 +27,8 @@ pnpm create sanity@latest
 E um `.env` na pasta `app` com:
 
 ```env
-SANITY_PROJECT_ID=xxxxxxxx
+SANITY_PROJECT_ID=XXXXXXXX
+RESEND_API_KEY=re_XXXXXXXXXXXXXX
 ```
 
 Depois é so rodar:
