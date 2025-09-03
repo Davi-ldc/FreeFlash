@@ -63,7 +63,7 @@ export function createApp(config: AppConfig, eta: Eta) {
 
   app.get('/', (c) => {
     const data: Home = {
-      description: 'Renato Vaz, um olhar além das lentes',
+      description: 'Descrição',
       ...baseTemplateData,
       ...helpers
     };
