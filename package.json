@@ -5,9 +5,9 @@
   "type": "module",
   "packageManager": "pnpm@10.0.0",
   "scripts": {
-    "dev:sanity": "pnpm --filter=cms dev",
-    "dev:app": "pnpm --filter=app dev",
-    "dev": "concurrently --names \"CMS,APP\" -c \"bgBlue.bold,bgGreen.bold\" \"pnpm dev:sanity\" \"pnpm dev:app\"",
+    "dev:cms": "pnpm --filter=./cms dev",
+    "dev:app": "pnpm --filter=./app dev",
+    "dev": "concurrently --names \"CMS,APP\" -c \"bgBlue.bold,bgGreen.bold\" \"pnpm dev:cms\" \"pnpm dev:app\"",
     "build": "pnpm turbo run build --filter=app",
     "a": "pnpm --filter=app analyze"
   },

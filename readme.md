@@ -43,7 +43,7 @@ pnpm build
 
 # Comandos específicos por workspace
 pnpm dev:app
-pnpm dev:sanity
+pnpm dev:cms
 
 # Analisa o tamanho do bundle do servidor (depois de rodar build)
 cd app
