@@ -1,30 +1,5 @@
 // Arquivo gerado automaticamente. Não edite.
 export const compiledTemplates = {
-  '/pages/home': function anonymous(it,options
-) {
-
-let include = (template, data) => this.render(template, data, options);
-let includeAsync = (template, data) => this.renderAsync(template, data, options);
-
-let __eta = {res: "", e: this.config.escapeFunction, f: this.config.filterFunction};
-
-function layout(path, data) {
-  __eta.layout = path;
-  __eta.layoutData = data;
-}
-
-__eta.res+=include('/partials/header', it)
-__eta.res+='\n<main id="sccont" class="main" data-scroll-container>\n  E ai? O que você vai construir?👀\n  '
-__eta.res+=include('/partials/footer', it)
-__eta.res+='</main>'
-
-if (__eta.layout) {
-  __eta.res = include (__eta.layout, {...it, body: __eta.res, ...__eta.layoutData});
-}
-
-return __eta.res;
-
-},
   '/partials/header': function anonymous(it,options
 ) {
 
@@ -90,6 +65,31 @@ function layout(path, data) {
 __eta.res+='<footer class="footer">\n\n</footer>\n<script type="module" src="'
 __eta.res+=__eta.e(it.vite_js)
 __eta.res+='"></script>\n</body>\n</html>'
+
+if (__eta.layout) {
+  __eta.res = include (__eta.layout, {...it, body: __eta.res, ...__eta.layoutData});
+}
+
+return __eta.res;
+
+},
+  '/pages/home': function anonymous(it,options
+) {
+
+let include = (template, data) => this.render(template, data, options);
+let includeAsync = (template, data) => this.renderAsync(template, data, options);
+
+let __eta = {res: "", e: this.config.escapeFunction, f: this.config.filterFunction};
+
+function layout(path, data) {
+  __eta.layout = path;
+  __eta.layoutData = data;
+}
+
+__eta.res+=include('/partials/header', it)
+__eta.res+='\n<main id="sccont" class="main" data-scroll-container>\n  E ai? O que você vai construir?👀\n  '
+__eta.res+=include('/partials/footer', it)
+__eta.res+='</main>'
 
 if (__eta.layout) {
   __eta.res = include (__eta.layout, {...it, body: __eta.res, ...__eta.layoutData});

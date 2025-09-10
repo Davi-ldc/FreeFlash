@@ -15,13 +15,12 @@ Uma dev stack opinativa, simples, rápida e com o menor curto de hospedagem poss
 ```bash
 git clone https://github.com/Davi-ldc/FreeFlash.git
 cd FreeFlash
-cd app
 ```
 
 Em `/cms` crie um novo projeto Sanity.
 ```bash
 cd cms
-pnpm create sanity@latest
+bun create sanity@latest
 ```
 
 E um `.env` na pasta `app` com:
@@ -33,24 +32,24 @@ RESEND_API_KEY=re_XXXXXXXXXXXXXX
 
 Depois é so rodar:
 ```bash
-pnpm i
+bun i
 
 # (Sanity e App)
-pnpm dev
+bun dev
 
 # build manual do app
-pnpm build
+bun build
 
 # Comandos específicos por workspace
-pnpm dev:app
-pnpm dev:cms
+bun dev:app
+bun dev:cms
 
 # Analisa o tamanho do bundle do servidor (depois de rodar build)
 cd app
-pnpm analyze 
+bun run analyze 
 
 # Ou em root
-pnpm a
+bun run a
 ```
 
 ---

@@ -1,0 +1,8 @@
+{
+  "name": "cms",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo CMS vazio"
+  }
+}

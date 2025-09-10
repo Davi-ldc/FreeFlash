@@ -6,14 +6,14 @@
     "node": ">=20.x"
   },
   "scripts": {
-    "analyze": "tsup server/index.ts --metafile && tsx server/utils/analyze.ts && start EsbuildAnalyzer.html && shx rm -rf EsbuildAnalyzer.html",
+    "analyze": "tsup server/index.ts --metafile && tsx server/utils/analyze.ts && open-cli EsbuildAnalyzer.html && shx rm -rf EsbuildAnalyzer.html",
     "fetch:sanity": "tsx fetch-sanity.ts",
     "precompileTemplates": "tsx precompile-templates.ts",
     "dev:vite": "vite",
     "dev:server": "tsx ./server/dev.ts",
-    "dev:watch:fetch-sanity": "nodemon --on-change-only --watch fetch-sanity.ts --exec \"pnpm fetch:sanity\"",
-    "dev:watch:server": "nodemon --watch server --watch api --watch precompile-templates.ts --ext ts --exec \"pnpm dev:server\"",
-    "dev": "pnpm fetch:sanity && concurrently --kill-others -n FETCH,VITE,SERVE -c cyan,yellow,black \"pnpm:dev:watch:fetch-sanity\" \"pnpm:dev:vite\" \"pnpm:dev:watch:server\"",
+    "dev:watch:fetch-sanity": "nodemon --on-change-only --watch fetch-sanity.ts --exec \"bun run fetch:sanity\"",
+    "dev:watch:server": "nodemon --watch server --watch api --watch precompile-templates.ts --ext ts --exec \"bun run dev:server\"",
+    "dev": "bun run fetch:sanity && concurrently --kill-others -n FETCH,VITE,SERVE -c cyan,yellow,black \"bun run dev:watch:fetch-sanity\" \"bun run dev:vite\" \"bun run dev:watch:server\"",
     "build:vite": "vite build",
     "build": "tsup server/index.ts && shx cp server/config/.vc-config.json .vercel/output/functions/index.func/ && shx cp server/config/vercel.config.json .vercel/output/config.json"
   },
@@ -24,6 +24,7 @@
     "dotenv": "^16.5.0",
     "esbuild-analyzer": "^0.2.0",
     "nodemon": "^3.1.10",
+    "open-cli": "^8.0.0",
     "sass-embedded": "^1.89.1",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",

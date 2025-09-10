@@ -1,1 +1,58 @@
-"*[_type == \"colecao\"] | order(ano desc, data desc) {\n      titulo, \"slug\": slug.current, local, data, ano, \"imagemPrincipal\": imagemPrincipal.asset->{url}\n    }"
+[
+  {
+    "body": [
+      {
+        "_key": "75fd80806a0e",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "7421d2fdd93e",
+            "_type": "span",
+            "marks": [],
+            "text": "lorem ipsum dolor sit amet "
+          }
+        ],
+        "markDefs": [],
+        "style": "normal"
+      }
+    ],
+    "description": " DescriçãoDescriçãoDescriçãoDescriçãoDescriçãoDescriçãoDescrição",
+    "mainImage": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-5373cb92f58d7d2ccc91f33db958949986cc21bb-184x173-jpg",
+        "_type": "reference"
+      }
+    },
+    "title": "Exemplo",
+    "mainImageUrl": "https://cdn.sanity.io/images/8z0behd5/production/5373cb92f58d7d2ccc91f33db958949986cc21bb-184x173.jpg"
+  },
+  {
+    "body": [
+      {
+        "_key": "4a746de72a6c",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "1317f6596d42",
+            "_type": "span",
+            "marks": [],
+            "text": "lorem ipsum"
+          }
+        ],
+        "markDefs": [],
+        "style": "normal"
+      }
+    ],
+    "description": "Descrição2Descrição2Descrição2Descrição2Descrição2",
+    "mainImage": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-b006214375e150077cddef189aedb96b16129e68-259x194-jpg",
+        "_type": "reference"
+      }
+    },
+    "title": "Exemplo2",
+    "mainImageUrl": "https://cdn.sanity.io/images/8z0behd5/production/b006214375e150077cddef189aedb96b16129e68-259x194.jpg"
+  }
+]

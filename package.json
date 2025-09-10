@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@10.0.0",
+  "workspaces": [
+    "app",
+    "cms"
+  ],
+  "packageManager": "bun@1.0.0",
   "scripts": {
-    "dev:cms": "pnpm --filter=./cms dev",
-    "dev:app": "pnpm --filter=./app dev",
-    "dev": "concurrently --names \"CMS,APP\" -c \"bgBlue.bold,bgGreen.bold\" \"pnpm dev:cms\" \"pnpm dev:app\"",
-    "build": "pnpm turbo run build --filter=app",
-    "a": "pnpm --filter=app analyze"
+    "dev:cms": "bun run --cwd ./cms dev",
+    "dev:app": "bun run --cwd ./app dev",
+    "dev": "concurrently --names \"CMS,APP\" -c \"bgBlue.bold,bgGreen.bold\" \"bun run dev:cms\" \"bun run dev:app\"",
+    "build": "turbo run build --filter=app",
+    "a": "bun run --cwd ./app analyze"
   },
   "dependencies": {
     "@sanity/client": "^7.6.0",
