@@ -6,14 +6,11 @@
     "node": ">=20.x"
   },
   "scripts": {
-    "analyze": "tsup server/index.ts --metafile && tsx server/utils/analyze.ts && open-cli EsbuildAnalyzer.html && shx rm -rf EsbuildAnalyzer.html",
-    "fetch:sanity": "tsx fetch-sanity.ts",
-    "precompileTemplates": "tsx precompile-templates.ts",
+    "analyze": "tsup server/index.ts --metafile && bun ./server/utils/analyze.ts && open-cli EsbuildAnalyzer.html && shx rm -rf EsbuildAnalyzer.html",
+    "fetch:sanity": "bun fetch-sanity.ts",
     "dev:vite": "vite",
-    "dev:server": "tsx ./server/dev.ts",
-    "dev:watch:fetch-sanity": "nodemon --on-change-only --watch fetch-sanity.ts --exec \"bun run fetch:sanity\"",
-    "dev:watch:server": "nodemon --watch server --watch api --watch precompile-templates.ts --ext ts --exec \"bun run dev:server\"",
-    "dev": "bun run fetch:sanity && concurrently --kill-others -n FETCH,VITE,SERVE -c cyan,yellow,black \"bun run dev:watch:fetch-sanity\" \"bun run dev:vite\" \"bun run dev:watch:server\"",
+    "dev:server": "bun --watch ./server/dev.ts",
+    "dev": "concurrently --kill-others-on-fail -n FETCH,VITE,SERVE -c cyan,yellow,black \"bun run fetch-sanity\" \"bun run dev:vite\" \"bun run dev:server\"",
     "build:vite": "vite build",
     "build": "tsup server/index.ts && shx cp server/config/.vc-config.json .vercel/output/functions/index.func/ && shx cp server/config/vercel.config.json .vercel/output/config.json"
   },
@@ -23,22 +20,19 @@
     "@types/node": "^24.0.13",
     "dotenv": "^16.5.0",
     "esbuild-analyzer": "^0.2.0",
-    "nodemon": "^3.1.10",
     "open-cli": "^8.0.0",
     "sass-embedded": "^1.89.1",
-    "tsx": "^4.20.3",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
   },
   "dependencies": {
     "@sanity/client": "^6.22.2",
     "@sanity/image-url": "^1.1.0",
+    "elysia": "^1.3.21",
     "eta": "^3.5.0",
     "glob": "^11.0.3",
     "gsap": "^3.13.0",
-    "hono": "^4.8.5",
     "locomotive-scroll": "^4.1.4",
-    "ogl": "^1.0.11",
     "resend": "^6.0.2",
     "shx": "^0.4.0",
     "tsup": "^8.5.0"

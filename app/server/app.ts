@@ -1,4 +1,4 @@
-import { Hono } from 'hono/tiny';
+import { Elysia } from 'elysia';
 import { compiledTemplates } from './precompiled-templates.js';
 import contentData from '../content.json';
 
@@ -59,30 +59,31 @@ export function createApp(config: AppConfig, eta: Eta) {
     asset: (path: string) => assetHelper(path, config.isDev, config.manifest, config.viteBaseUrl)
   };
 
-  const app = new Hono();
+  const app = new Elysia()
+    .get('/', ({ set }) => {
+      const data: Home = {
+        description: 'Descrição',
+        ...baseTemplateData,
+        ...helpers
+      };
 
-  app.get('/', (c) => {
-    const data: Home = {
-      description: 'Descrição',
-      ...baseTemplateData,
-      ...helpers
-    };
+      const html = eta.render('/pages/home', data) as string;
+      set.headers['Content-Type'] = 'text/html; charset=utf-8';
+      return html;
+    });
 
-    const html = eta.render('/pages/home', data) as string;
-    return c.html(html);
-  });
-
-  // app.get('/sobre', async (c) => {
+  // app.get('/sobre', async ({ set }) => {
   //   const data = {
   //     ...baseTemplateData,
   //     ...helpers
   //   };
 
   //   const html = eta.render('@pages/home', data) as string;
-  //   return c.html(html);
+  //   set.headers['Content-Type'] = 'text/html; charset=utf-8';
+  //   return html;
   // });
 
-  // app.get('/site/:slug', async (c) => {
+  // app.get('/site/:slug', async ({ set, params }) => {
 
   // });
 

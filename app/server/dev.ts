@@ -1,12 +1,10 @@
-import { serve } from '@hono/node-server';
 import { createApp } from './app';
 import { Eta } from 'eta';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
-import fs from 'fs';               // <-- adicionado
+import fs from 'fs';
 
-import { HONO_PORT } from './config/port';
-import { VITE_PORT } from './config/port';
+import { DEV_PORT, VITE_PORT } from './config/port';
 
 const { CODESPACE_NAME } = process.env as Record<string, string | undefined>;
 const viteBaseUrl = CODESPACE_NAME 
@@ -24,8 +22,6 @@ async function DevApis(root: any) {
   }
   const files = fs.readdirSync(apiDir);
 
-  const discovered: string[] = [];
-
   for (const file of files) {
     if (!/\.(ts|js|mjs|cjs)$/.test(file)) continue;
     const fullPath = path.join(apiDir, file);
@@ -33,34 +29,14 @@ async function DevApis(root: any) {
       const mod = await import(pathToFileURL(fullPath).href);
       const sub = mod.default;
       if (sub) {
-        root.route('/', sub);
-        if (Array.isArray((sub as any).routes)) {
-          //pra cada rota
-          for (const r of (sub as any).routes) {
-            const methods = Array.isArray(r.method) ? r.method : [r.method || 'ANY'];
-            //Olha os métodos
-            for (const m of methods) {
-              discovered.push(`${(m || 'ANY')} ${r.path}`);
-            }
-          }
-        }
+        root.use(sub);
         console.log('[API] montada:', file);
       } else {
-        console.warn('[API] ignorada (sem export default app):', file);
+        console.warn('[API] ignorada (sem export default):', file);
       }
     } catch (e) {
       console.error('[API] erro ao importar', file, e);
     }
-  }
-
-  if (discovered.length) {
-    const list = discovered
-      .sort((a, b) => a.localeCompare(b))
-      .map(l => '  - ' + l)
-      .join('\n');
-    console.log('APIs disponíveis:\n' + list);
-  } else {
-    console.log('Nenhuma rota de API encontrada.');
   }
 }
 
@@ -71,10 +47,6 @@ async function DevApis(root: any) {
     views: viewsDir,
     cache: false
   });
-
-  const viteBaseUrl = CODESPACE_NAME 
-    ? `https://${CODESPACE_NAME}-${VITE_PORT}.app.github.dev`
-    : `http://localhost:${VITE_PORT}`;
 
   const app = createApp({
     isDev: true,
@@ -87,11 +59,8 @@ async function DevApis(root: any) {
   await DevApis(app);
 
   try {
-    serve({
-      fetch: app.fetch,
-      port: HONO_PORT,
-    });
-    console.log(`🚀 Página principal rodando em \x1b[36mhttp://localhost:\x1b[1m${HONO_PORT}\x1b[0m`);
+    app.listen(DEV_PORT);
+    console.log(`🚀 Página principal rodando em \x1b[36mhttp://localhost:\x1b[1m${DEV_PORT}\x1b[0m`);
     console.log(`🔌 Vite dev em: ${viteBaseUrl}`);
   } catch (error) {
     console.error('❌ Erro ao iniciar o servidor:', error);

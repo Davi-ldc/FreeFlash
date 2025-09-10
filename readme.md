@@ -218,6 +218,8 @@ No `tsup.config.ts` → format: `'cjs'` vira `'esm'`
 O projeto está sempre evoluindo. Algumas ideias para o futuro:
 
 Backend->
+* **Melhor HRM pro fetch-sanity.ts** 
+
 * **Fetches Incrementais do Sanity:** Hoje, cada build busca todo o conteúdo. Uma otimização incrível seria buscar apenas os documentos alterados desde o último build, como um "git" do conteúdo. 
 * **Proxy reverso para urls do Sanity:** Atualmente, não há restrições nativas no Sanity para limitar parâmetros tipo ?w=99999, o que poderia permitir que alguem manipulasse os URLs e para solicitar imagens gigantes e queimar minha banda disponível. Seria interessante implementar um entrypoint que limite esses parâmetros pra evitar ataques.
 * **Melhor suporte para github codespaces:** Já funciona mas falta garantir suporte para que o vite consiga importar as fontes

@@ -7,7 +7,6 @@
     "app",
     "cms"
   ],
-  "packageManager": "bun@1.0.0",
   "scripts": {
     "dev:cms": "bun run --cwd ./cms dev",
     "dev:app": "bun run --cwd ./app dev",

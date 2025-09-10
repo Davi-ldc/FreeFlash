@@ -1,6 +1,5 @@
 //Vercel entrypoint
 import type { Manifest } from 'vite';
-import { handle } from 'hono/vercel';
 import { createApp } from './app';
 
 import { Eta } from 'eta';
@@ -26,7 +25,6 @@ const app = createApp({
   viteJS: `/${manifest['src/main.ts'].file}`,
   viteCSS: `/${manifest['src/main.ts'].css[0]}`,
   manifest: manifest
-}, eta);
+}, eta)
 
-export const GET = handle(app);
-export const POST = handle(app);
+export default app;

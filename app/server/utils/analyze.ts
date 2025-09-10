@@ -69,8 +69,8 @@ ANÁLISE GZIP (para Vercel Edge Functions)📄
 
 const targetPath = path.join(appRoot, 'meta.json');
 try {
-  console.log('📄 Gerando relatório do esbuild-analyzer (arquivos descomprimidos)');
-  
+  console.log('📄 Gerando relatório... (arquivo descomprimido)');
+
   copyFileSync(metafilePath, targetPath);
 
   execSync(`esbuild-analyzer --metafile=${targetPath}`, {
