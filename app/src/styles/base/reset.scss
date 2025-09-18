@@ -85,11 +85,11 @@ time,
 mark,
 audio,
 video {
+  border: 0;
+  font: inherit;
+  font-size: 100%;
   margin: 0;
   padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
   vertical-align: baseline;
 }
 
@@ -110,11 +110,13 @@ section {
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+  text-rendering: optimizelegibility;
 }
+
 html.is-transitioning {
   pointer-events: none !important;
 }
+
 html.is-transitioning * {
   pointer-events: none !important;
 }
@@ -133,9 +135,7 @@ button,
 input,
 select,
 textarea {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+  appearance: none;
   background: none;
   border: none;
   color: inherit;
@@ -158,11 +158,11 @@ q {
   quotes: none;
 }
 
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
-  content: "";
+blockquote::before,
+blockquote::after,
+q::before,
+q::after {
+  content: '';
   content: none;
 }
 

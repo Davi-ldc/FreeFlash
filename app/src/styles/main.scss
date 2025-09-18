@@ -6,11 +6,34 @@
 /*
 * Variáveis
 */
-$color-white: #E8E8E8;
+$color-white: #e8e8e8;
 $color-black: #101010;
-
-$font-fallback-sans: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
-$font-fallback-serif: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+$font-fallback-sans:
+  -apple-system,
+  blinkmacsystemfont,
+  avenir next,
+  avenir,
+  segoe ui,
+  helvetica neue,
+  helvetica,
+  cantarell,
+  ubuntu,
+  roboto,
+  noto,
+  arial,
+  sans-serif;
+$font-fallback-serif:
+  iowan old style,
+  apple garamond,
+  baskerville,
+  times new roman,
+  droid serif,
+  times,
+  source serif pro,
+  serif,
+  apple color emoji,
+  segoe ui emoji,
+  segoe ui symbol;
 $font-primary-sans: 'Font Name', $font-fallback-sans;
 $font-primary-serif: 'Font Name', $font-fallback-serif;
 
@@ -22,6 +45,6 @@ $font-primary-serif: 'Font Name', $font-fallback-serif;
 
 // $padding-global: 1em;
 
-/*
-* Mixins
-*/
+html {
+  font-size: min(min(calc(100vw / 1728 * 10), calc(100vh / 990 * 10)), 10px);
+}

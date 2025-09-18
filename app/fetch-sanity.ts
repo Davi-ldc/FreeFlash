@@ -1,9 +1,4 @@
-import 'dotenv/config';
-import { createClient } from '@sanity/client';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import imageUrlBuilder from '@sanity/image-url';
+import 'dotenv/config'
 // import type { types } from './src/types/sanity';
 
 // const __filename = fileURLToPath(import.meta.url);
@@ -33,7 +28,7 @@ import imageUrlBuilder from '@sanity/image-url';
 //     const outputPath = path.resolve(__dirname, 'content.json')
 //     //o stringify converte um objeto js em string json
 //     // await fs.writeFile(outputPath, JSON.stringify(agrupadas , null, 2)) //pra debug
-//     //dps salva em um content.json 
+//     //dps salva em um content.json
 //     await fs.writeFile(outputPath, JSON.stringify(query))
 
 //     const elapsedTime = (performance.now() - time) / 1000;

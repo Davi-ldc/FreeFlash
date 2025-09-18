@@ -38,8 +38,8 @@ bun i
 bun dev
 
 # build manual do app
-bun build
-
+bun run build
+JSX -> 20.5KB
 # Comandos específicos por workspace
 bun dev:app
 bun dev:cms

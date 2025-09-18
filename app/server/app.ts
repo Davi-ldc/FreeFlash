@@ -1,91 +1,94 @@
-import { Elysia } from 'elysia';
-import { compiledTemplates } from './precompiled-templates.js';
-import contentData from '../content.json';
+import type { FC } from 'hono/jsx'
+import { Hono } from 'hono/tiny'
+import type { Manifest } from 'vite'
 
-// Types
-// import type { types } from '../src/types/sanity';
-import type { Base, Home } from '../src/types/pages';
-import type { Manifest } from 'vite';
-import type { Eta } from 'eta';
+import type { LayoutProps, PageModel, SectionMap } from '../src/types/views'
 
 export interface AppConfig {
-  isDev: boolean;
-  viteJS: string;
-  viteCSS: string;
-  manifest?: Manifest;
-  vitePort?: number;
-  viteBaseUrl?: string;
+  isDev: boolean
+  manifest?: Manifest
+  viteBaseUrl?: string
+  viteCSS: string
+  viteJS: string
+  vitePort?: number
+}
+
+export type Views = {
+  Layout: FC<LayoutProps>
 }
 
 function assetHelper(originalPath: string, isDev: boolean, manifest?: Manifest, viteBaseUrl?: string): string {
   // Em DEV -> servidor Vite
   if (isDev) {
     if (!viteBaseUrl) {
-      console.warn('faltou o viteBaseUrl no assetHelper');
-      return `/${originalPath}`;
+      console.warn('faltou o viteBaseUrl no assetHelper')
+
+      return `/${originalPath}`
     }
-    const base = viteBaseUrl.replace(/\/+$/, '');
-    const path = String(originalPath).replace(/^\/+/, '');
-    return `${base}/${path}`;
+    const base = viteBaseUrl.replace(/\/+$/, '')
+    const path = String(originalPath).replace(/^\/+/, '')
+
+    return `${base}/${path}`
   }
-  
+
   // Fallback de segurança
   if (!manifest) {
-    console.warn('faltou o manifest no assetHelper');
-    return `/${originalPath}`;
+    console.warn('faltou o manifest no assetHelper')
+
+    return `/${originalPath}`
   }
 
-  //Em prod lê o manifest e retorna o caminho para o arquivo hasheado
-  const manifestKey = originalPath; // O manifest do Vite usa o caminho a partir da raiz como chave.
+  // Em prod lê o manifest e retorna o caminho para o arquivo hasheado
+  const manifestKey = originalPath // o manifest usa a raiz como chave (ex: 'src/main.ts')
+
   if (manifest[manifestKey]) {
-    return `/${manifest[manifestKey].file}`;
+    return `/${manifest[manifestKey].file}`
   }
-  
-  console.warn(`Asset não encontrado no manifest.json: ${originalPath}`);
-  return `/${originalPath}`;
+
+  console.warn(`Asset não encontrado no manifest.json: ${originalPath}`)
+
+  return `/${originalPath}`
 }
 
-export function createApp(config: AppConfig, eta: Eta) {
-  const baseTemplateData: Base = {
-    site_title: 'FreeFlash✨',
-    charset: 'UTF-8',
-    lang: 'pt-br',
+const section = <T extends keyof SectionMap>(type: T, props: SectionMap[T]): { _type: T } & SectionMap[T] => ({
+  _type: type,
+  ...props,
+})
+
+export function createApp(config: AppConfig, views: Views) {
+  const baseProps: Omit<LayoutProps, 'page'> = {
+    asset: (p) => assetHelper(p, config.isDev, config.manifest, config.viteBaseUrl),
+    description: 'Descrição',
     is_dev: config.isDev,
+    lang: 'pt-br',
+    site_title: 'FreeFlash✨',
+    vite_css: config.viteCSS,
     vite_js: config.viteJS,
-    vite_css: config.viteCSS
-  };
+  }
 
-  const helpers = {
-    asset: (path: string) => assetHelper(path, config.isDev, config.manifest, config.viteBaseUrl)
-  };
+  const app = new Hono()
 
-  const app = new Elysia()
-    .get('/', ({ set }) => {
-      const data: Home = {
-        description: 'Descrição',
-        ...baseTemplateData,
-        ...helpers
-      };
+  app.get('/', (c) => {
+    const page: PageModel = {
+      content: [
+        section('welcome', { text: 'Bem-vindo ao FreeFlash!' }),
+        section('welcome', { text: 'Esta é uma seção de boas-vindas.' }),
+      ],
+    }
 
-      const html = eta.render('/pages/home', data) as string;
-      set.headers['Content-Type'] = 'text/html; charset=utf-8';
-      return html;
-    });
+    const props: LayoutProps = {
+      ...baseProps,
+      page,
+    }
 
-  // app.get('/sobre', async ({ set }) => {
-  //   const data = {
-  //     ...baseTemplateData,
-  //     ...helpers
-  //   };
+    const el = views.Layout(props)
 
-  //   const html = eta.render('@pages/home', data) as string;
-  //   set.headers['Content-Type'] = 'text/html; charset=utf-8';
-  //   return html;
-  // });
+    if (!el) {
+      return c.text('error rendering the app', 500)
+    }
 
-  // app.get('/site/:slug', async ({ set, params }) => {
+    return c.html(el)
+  })
 
-  // });
-
-  return app;
+  return app
 }

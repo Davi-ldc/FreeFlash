@@ -1,0 +1,27 @@
+{
+  //Settings basicas pro prettier
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+
+  "stylelint.enable": true,
+  "stylelint.validate": ["scss"],
+  "stylelint.configFile": "./app/stylelint.config.js",
+
+  "eslint.format.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact"
+  ],
+
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always"
+  }
+}

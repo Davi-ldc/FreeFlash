@@ -1,5 +1,5 @@
 {
-  "name": "renato-portfolio",
+  "name": "free-flash",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -7,6 +7,7 @@
     "app",
     "cms"
   ],
+  "packageManager": "bun@1.2.21",
   "scripts": {
     "dev:cms": "bun run --cwd ./cms dev",
     "dev:app": "bun run --cwd ./app dev",
@@ -15,10 +16,12 @@
     "a": "bun run --cwd ./app analyze"
   },
   "dependencies": {
+    "@kitajs/ts-html-plugin": "^4.1.2",
     "@sanity/client": "^7.6.0",
     "vercel": "^46.1.1"
   },
   "devDependencies": {
+    "@elysiajs/html": "^1.3.1",
     "concurrently": "^9.2.0",
     "turbo": "^2.3.0"
   }

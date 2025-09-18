@@ -1,31 +1,33 @@
 import { defineConfig } from 'vite'
 import path from 'path'
-import { VITE_PORT } from './server/config/port';
+import { VITE_PORT } from './server/config/port'
 
-const port = VITE_PORT;
+const port = VITE_PORT
 
 export default defineConfig({
   root: '.',
   plugins: [
     {
-      name: 'eta-watcher',
+      name: 'watcher',
       handleHotUpdate({ file, server }) {
-        if (file.endsWith('.eta')) {
-          console.log(`🔄 Template alterado: ${path.basename(file)}`);
+        if (file.endsWith('.tsx')) {
+          console.log(`🔄 Template alterado: ${path.basename(file)}`)
+
           server.ws.send({
             type: 'full-reload',
-            path: '*'
-          });
-          return [];
+            path: '*',
+          })
+
+          return []
         }
-      }
-    }
+      },
+    },
   ],
   server: {
     port: port,
     //sem isso ele vai responder como se os assets estivessem em localhost:honoPort/
     origin: `http://localhost:${port}`,
-    cors: true,//Por causa do codespaces,
+    cors: true, //Por causa do codespaces,
   },
   build: {
     outDir: '.vercel/output/static',
@@ -39,9 +41,9 @@ export default defineConfig({
       output: {
         entryFileNames: 'assets/js/[name].[hash].js',
         chunkFileNames: 'assets/js/[name].[hash].js',
-        assetFileNames: 'assets/[ext]/[name].[hash].[ext]'
-      }
+        assetFileNames: 'assets/[ext]/[name].[hash].[ext]',
+      },
     },
-    assetsInlineLimit: 0
-  }
+    assetsInlineLimit: 0,
+  },
 })

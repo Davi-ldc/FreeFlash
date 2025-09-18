@@ -1,5 +1,4 @@
 {
-  "version": 3,
   "routes": [
     {
       "src": "/assets/(.*)",
@@ -14,5 +13,6 @@
       "src": "/((?!api/).*)",
       "dest": "/index"
     }
-  ]
+  ],
+  "version": 3
 }

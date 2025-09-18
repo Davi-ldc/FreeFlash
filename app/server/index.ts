@@ -1,30 +1,28 @@
-//Vercel entrypoint
-import type { Manifest } from 'vite';
-import { createApp } from './app';
+// Vercel entrypoint
+import { handle } from 'hono/vercel'
+import type { Manifest } from 'vite'
 
-import { Eta } from 'eta';
-import { compiledTemplates } from './precompiled-templates.js';
+import manifestData from '../.vercel/output/static/.vite/manifest.json'
+// importa as views pré-compiladas (geradas por precompile-views.ts)
+import Layout from '../src/views/layout'
+import { createApp } from './app'
 
-import manifestData from '../.vercel/output/static/.vite/manifest.json';
-
-const manifest: Manifest = manifestData as Manifest;
+const manifest: Manifest = manifestData as Manifest
 
 if (!manifest['src/main.ts'] || !manifest['src/main.ts'].css) {
-  console.error('main.ts não ta no manifest.json ou você não importou o CSS👀');
-  process.exit(1);
+  console.error('main.ts não ta no manifest.json ou você não importou o CSS👀')
+  process.exit(1)
 }
 
-//Usa os templates compilados
-const eta = new Eta({ varName: 'it' });
-for (const name in compiledTemplates) {
-  eta.loadTemplate(name, compiledTemplates[name]);
-}
+const app = createApp(
+  {
+    isDev: false,
+    manifest,
+    viteCSS: `/${manifest['src/main.ts'].css[0]}`,
+    viteJS: `/${manifest['src/main.ts'].file}`,
+  },
+  { Layout },
+)
 
-const app = createApp({
-  isDev: false,
-  viteJS: `/${manifest['src/main.ts'].file}`,
-  viteCSS: `/${manifest['src/main.ts'].css[0]}`,
-  manifest: manifest
-}, eta)
-
-export default app;
+export const GET = handle(app)
+export const POST = handle(app)
