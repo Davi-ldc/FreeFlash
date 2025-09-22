@@ -1,9 +1,4 @@
-import { serve } from '@hono/node-server'
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath, pathToFileURL } from 'url'
-
-import Layout from '../src/views/layout'
+// server/dev.ts
 import { createApp } from './app'
 import { DEV_PORT, VITE_PORT } from './config/port'
 
@@ -13,82 +8,54 @@ const viteBaseUrl = CODESPACE_NAME
   ? `https://${CODESPACE_NAME}-${VITE_PORT}.app.github.dev`
   : `http://localhost:${VITE_PORT}`
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+function logRoutes(app: ReturnType<typeof createApp>) {
+  const routes: string[] = []
 
-async function DevApis(root: any) {
-  const apiDir = path.join(__dirname, '../api')
+  if (app.routes && Array.isArray(app.routes)) {
+    for (const route of app.routes) {
+      const methods = Array.isArray(route.method) ? route.method : [route.method || 'GET']
 
-  if (!fs.existsSync(apiDir)) {
-    console.warn('[API] diretório /api não encontrado')
-
-    return
-  }
-  const files = fs.readdirSync(apiDir)
-  const discovered: string[] = []
-
-  for (const file of files) {
-    if (!/\.(ts|js|mjs|cjs)$/.test(file)) continue
-    const fullPath = path.join(apiDir, file)
-
-    try {
-      const mod = await import(pathToFileURL(fullPath).href)
-      const sub = mod.default
-
-      if (sub) {
-        root.route('/', sub)
-
-        if (Array.isArray((sub as any).routes)) {
-          for (const r of (sub as any).routes) {
-            const methods = Array.isArray(r.method) ? r.method : [r.method || 'ANY']
-
-            for (const m of methods) {
-              discovered.push(`${m || 'ANY'} ${r.path}`)
-            }
-          }
-        }
-        console.log('[API] montada:', file)
-      } else {
-        console.warn('[API] ignorada (sem export default app):', file)
+      for (const method of methods) {
+        routes.push(`${method.padEnd(7)} ${route.path}`)
       }
-    } catch (e) {
-      console.error('[API] erro ao importar', file, e)
     }
   }
 
-  if (discovered.length) {
-    const list = discovered
-      .sort((a, b) => a.localeCompare(b))
-      .map((l) => '  - ' + l)
-      .join('\n')
-    console.log('APIs disponíveis:\n' + list)
-  } else {
-    console.log('Nenhuma rota de API encontrada.')
+  if (routes.length) {
+    console.log('\n📍 Rotas disponíveis:')
+
+    routes
+      .sort((a, b) => {
+        // Agrupa por path, depois por método
+        const [methodA, pathA] = a.split(' ')
+        const [methodB, pathB] = b.split(' ')
+
+        return pathA.localeCompare(pathB) || methodA.localeCompare(methodB)
+      })
+      .forEach((route) => console.log(`   ${route}`))
+    console.log('')
   }
 }
 
-;(async () => {
-  const app = createApp(
-    {
-      isDev: true,
-      viteBaseUrl,
-      viteCSS: '',
-      viteJS: `${viteBaseUrl}/src/main.ts`,
-      vitePort: VITE_PORT,
-    },
-    { Layout },
-  )
+async function main() {
+  const app = createApp({
+    isDev: true,
+    viteBaseUrl,
+    viteCSS: `${viteBaseUrl}/src/styles/main.scss`,
+    viteJS: `${viteBaseUrl}/src/main.ts`,
+    vitePort: VITE_PORT,
+  })
 
-  await DevApis(app)
+  app.listen(DEV_PORT, () => {
+    console.log(`\n🚀 Servidor rodando em \x1b[36mhttp://localhost:\x1b[1m${DEV_PORT}\x1b[0m`)
 
-  try {
-    serve({
-      fetch: app.fetch,
-      port: DEV_PORT,
-    })
-    console.log(`🚀 Página principal rodando em \x1b[36mhttp://localhost:\x1b[1m${DEV_PORT}\x1b[0m`)
-    console.log(`🔌 Vite dev em: ${viteBaseUrl}`)
-  } catch (error) {
-    console.error('❌ Erro ao iniciar o servidor:', error)
-  }
-})()
+    if (CODESPACE_NAME) {
+      console.log(`   Codespace:  \x1b[36mhttps://${CODESPACE_NAME}-${DEV_PORT}.app.github.dev\x1b[0m`)
+    }
+    console.log(`⚡ Vite DevServer: ${viteBaseUrl}`)
+
+    logRoutes(app)
+  })
+}
+
+main()

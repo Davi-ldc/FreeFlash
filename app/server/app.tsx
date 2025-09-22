@@ -1,8 +1,11 @@
-import type { FC } from 'hono/jsx'
-import { Hono } from 'hono/tiny'
+import { html } from '@elysiajs/html'
+import { Elysia } from 'elysia'
+import { CloudflareAdapter } from 'elysia/adapter/cloudflare-worker'
 import type { Manifest } from 'vite'
 
 import type { LayoutProps, PageModel, SectionMap } from '../src/types/views'
+import Layout from '../src/views/layout'
+import testApi from './api/test'
 
 export interface AppConfig {
   isDev: boolean
@@ -13,18 +16,10 @@ export interface AppConfig {
   vitePort?: number
 }
 
-export type Views = {
-  Layout: FC<LayoutProps>
-}
-
 function assetHelper(originalPath: string, isDev: boolean, manifest?: Manifest, viteBaseUrl?: string): string {
   // Em DEV -> servidor Vite
   if (isDev) {
-    if (!viteBaseUrl) {
-      console.warn('faltou o viteBaseUrl no assetHelper')
-
-      return `/${originalPath}`
-    }
+    if (!viteBaseUrl) return `/${originalPath}`
     const base = viteBaseUrl.replace(/\/+$/, '')
     const path = String(originalPath).replace(/^\/+/, '')
 
@@ -32,20 +27,12 @@ function assetHelper(originalPath: string, isDev: boolean, manifest?: Manifest, 
   }
 
   // Fallback de segurança
-  if (!manifest) {
-    console.warn('faltou o manifest no assetHelper')
-
-    return `/${originalPath}`
-  }
+  if (!manifest) return `/${originalPath}`
 
   // Em prod lê o manifest e retorna o caminho para o arquivo hasheado
   const manifestKey = originalPath // o manifest usa a raiz como chave (ex: 'src/main.ts')
 
-  if (manifest[manifestKey]) {
-    return `/${manifest[manifestKey].file}`
-  }
-
-  console.warn(`Asset não encontrado no manifest.json: ${originalPath}`)
+  if (manifest[manifestKey]) return `/${manifest[manifestKey].file}`
 
   return `/${originalPath}`
 }
@@ -55,7 +42,7 @@ const section = <T extends keyof SectionMap>(type: T, props: SectionMap[T]): { _
   ...props,
 })
 
-export function createApp(config: AppConfig, views: Views) {
+export function createApp(config: AppConfig) {
   const baseProps: Omit<LayoutProps, 'page'> = {
     asset: (p) => assetHelper(p, config.isDev, config.manifest, config.viteBaseUrl),
     description: 'Descrição',
@@ -66,9 +53,9 @@ export function createApp(config: AppConfig, views: Views) {
     vite_js: config.viteJS,
   }
 
-  const app = new Hono()
+  const app = new Elysia({ adapter: CloudflareAdapter }).use(html())
 
-  app.get('/', (c) => {
+  app.get('/', () => {
     const page: PageModel = {
       content: [
         section('welcome', { text: 'Bem-vindo ao FreeFlash!' }),
@@ -81,14 +68,10 @@ export function createApp(config: AppConfig, views: Views) {
       page,
     }
 
-    const el = views.Layout(props)
-
-    if (!el) {
-      return c.text('error rendering the app', 500)
-    }
-
-    return c.html(el)
+    return <Layout {...props} />
   })
+
+  app.use(testApi)
 
   return app
 }

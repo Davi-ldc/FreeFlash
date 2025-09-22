@@ -5,14 +5,15 @@
   "engines": {
     "node": ">=20.x"
   },
+  "sideEffects": false,
   "scripts": {
-    "analyze": "tsup server/index.ts --metafile && bun ./server/utils/analyze.ts && open-cli EsbuildAnalyzer.html && shx rm -rf EsbuildAnalyzer.html",
+    "analyze": "bun build.ts --debug && bun server/utils/analyze.ts",
     "fetch:sanity": "bun fetch-sanity.ts",
     "dev:vite": "vite",
     "dev:server": "bun --hot ./server/dev.ts",
     "dev": "concurrently --kill-others-on-fail -n FETCH,VITE,SERVE -c cyan,yellow,black \"bun run fetch-sanity\" \"bun run dev:vite\" \"bun run dev:server\"",
     "build:vite": "vite build",
-    "build": "tsup server/index.ts && shx cp server/config/.vc-config.json .vercel/output/functions/index.func/ && shx cp server/config/vercel.config.json .vercel/output/config.json",
+    "build": "bun build.ts",
     "lint": "stylelint '**/*.scss' && eslint .",
     "lint:fix": "stylelint '**/*.scss' --fix && eslint . --fix",
     "format": "prettier --write ."
@@ -24,7 +25,6 @@
     "@typescript-eslint/eslint-plugin": "^8.44.0",
     "bun": "^1.2.22",
     "dotenv": "^16.5.0",
-    "esbuild-analyzer": "^0.2.0",
     "eslint": "^9.35.0",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-simple-import-sort": "^12.1.1",
@@ -33,6 +33,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-sort-json": "^4.1.1",
     "sass-embedded": "^1.89.1",
+    "source-map-explorer": "^2.5.3",
     "stylelint": "^16.24.0",
     "stylelint-config-standard-scss": "^16.0.0",
     "stylelint-order": "^7.0.0",
@@ -42,14 +43,16 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
+    "@cloudflare/workers-types": "^4.20250920.0",
+    "@elysiajs/html": "^1.4.0",
+    "@kitajs/html": "^4.2.10",
+    "@kitajs/ts-html-plugin": "^4.1.3",
     "@sanity/client": "^6.22.2",
     "@sanity/image-url": "^1.1.0",
-    "eta": "^3.5.0",
+    "elysia": "^1.4.7",
     "glob": "^11.0.3",
     "gsap": "^3.13.0",
-    "hono": "^4.9.7",
     "resend": "^6.0.2",
-    "shx": "^0.4.0",
-    "tsup": "^8.5.0"
+    "shx": "^0.4.0"
   }
 }

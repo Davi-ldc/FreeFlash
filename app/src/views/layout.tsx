@@ -1,16 +1,14 @@
-import type { FC } from 'hono/jsx'
-
 import type { LayoutProps } from '../types/views'
 import Footer from './layout/Footer'
 import Welcome from './sections/Welcome'
 
-const Layout: FC<LayoutProps> = (props) => {
+const Layout = (props: LayoutProps) => {
   const { lang, is_dev, site_title, description, vite_css, vite_js } = props
 
   return (
     <html lang={lang}>
       <head>
-        <meta charSet="UTF-8" />
+        <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{site_title}</title>
 
@@ -42,7 +40,7 @@ const Layout: FC<LayoutProps> = (props) => {
                 }
               })}
 
-              <Footer {...props} />
+              <Footer text="Rodapé" />
             </div>
           </div>
         </div>

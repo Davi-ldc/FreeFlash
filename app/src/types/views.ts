@@ -21,7 +21,7 @@ export type AssetFn = (path: string) => string
 
 export interface LayoutProps {
   asset: AssetFn
-  description?: string
+  description: string
   is_dev: boolean
   lang: string
   page: PageModel

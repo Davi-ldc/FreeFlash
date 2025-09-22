@@ -1,12 +1,11 @@
 interface FooterProps {
-  vite_js: string
+  text?: string
 }
 
-const Footer = ({ vite_js }: FooterProps) => {
+const Footer = (props: FooterProps) => {
   return (
     <>
-      <footer class="footer"></footer>
-      <script type="module" src={vite_js}></script>
+      <footer class="footer">{props.text}</footer>
     </>
   )
 }

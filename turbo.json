@@ -1,13 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
-
     "build:vite": {
       "cache": true,
       "inputs": ["src/**/*", "types/**", "vite.config.ts"],
-      "outputs": [
-        ".vercel/output/static/**" 
-      ]
+      "outputs": ["out/static/**"]
     },
 
     "fetch:sanity": {
@@ -17,19 +14,18 @@
       "outputs": ["content.json"]
     },
 
-    "precompileTemplates": {
-      "cache": true,
-      "inputs": ["src/pages/**/*", "src/partials/**/*", "precompile-templates.ts"],
-      "outputs": ["server/precompiled-templates.js"]
-    },
-
     "build": {
       "cache": false,
-      "dependsOn": ["fetch:sanity", "build:vite", "precompileTemplates"],
-      "inputs": ["server/config/**/*","server/app.ts","server/index.ts", "server/precompiled-templates.js", "content.json", ".vercel/output/static/.vite/manifest.json", "types/sanity.ts", "types/pages.ts"],
-      "outputs": [
-        ".vercel/output/functions/**"
-      ]
+      "dependsOn": ["fetch:sanity", "build:vite"],
+      "inputs": [
+        "server/**",
+        "content.json",
+        "out/static/.vite/manifest.json",
+        "src/views/**",
+        "types/**",
+        "build.ts"
+      ],
+      "outputs": ["out/_worker.js"]
     }
   }
 }

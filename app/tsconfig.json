@@ -1,17 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ESNext", //mais recente
-    "module": "ESNext", //mais recente
-    "moduleResolution": "node",
-    "strict": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
-    "types": ["vite/client", "hono/jsx"],
-    "esModuleInterop": true, //pra importar libs antigas
+    "jsxImportSource": "@kitajs/html",
+    "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ESNext", "DOM"],
+    "strict": true,
+    "types": ["@cloudflare/workers-types"],
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./src",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["src/**/*", "*.ts", "server/**/*", "api/**/*", "eslint.config.js"]
+  "include": ["src/**/*", "*.ts", "server/**/*", "server/api/**/*", "eslint.config.js", "build.js"]
 }
