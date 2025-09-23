@@ -1,0 +1,27 @@
+name = "freeflash"
+main = "app/out/_worker.js"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[site]
+bucket = "app/out/static"
+
+[build]
+command = "cd app && bun run build"
+
+# https://freeflash.workers.dev
+workers_dev = true
+
+# domínio:
+# route = { pattern = "freeflash.com/*", zone_name = "freeflash.com" }
+
+# Limites (free tier)
+[limits]
+cpu_ms = 10 # 10ms no plano grátis
+
+[dev]
+port = 8787
+local_protocol = "http"
+
+[observability]
+enabled = true
