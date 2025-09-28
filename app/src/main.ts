@@ -10,3 +10,5 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
     debounce((): void => {}, CONFIG.DEBOUNCE_DELAY),
   )
 })
+
+console.log('oi')

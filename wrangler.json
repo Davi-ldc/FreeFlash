@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "freeflash",
+  "main": "app/out/_worker.js",
+  "compatibility_date": "2025-06-01",
+  "assets": {
+    "directory": "app/out/static"
+  }
+}

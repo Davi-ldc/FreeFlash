@@ -1,31 +1,31 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
-    "build:vite": {
+    "app#build:vite": {
       "cache": true,
-      "inputs": ["src/**/*", "types/**", "vite.config.ts"],
-      "outputs": ["out/static/**"]
+      "inputs": ["app/src/**/*", "app/types/**", "app/vite.config.ts"],
+      "outputs": ["app/out/static/**"]
     },
 
-    "fetch:sanity": {
+    "app#fetch:sanity": {
       "cache": false,
       "env": ["SANITY_PROJECT_ID"],
-      "inputs": ["fetch-sanity.ts", "types/sanity.ts"],
-      "outputs": ["content.json"]
+      "inputs": ["app/fetch-sanity.ts", "app/types/sanity.ts"],
+      "outputs": ["app/content.json"]
     },
 
-    "build": {
+    "app#build": {
       "cache": false,
-      "dependsOn": ["fetch:sanity", "build:vite"],
+      "dependsOn": ["app#fetch:sanity", "app#build:vite"],
       "inputs": [
-        "server/**",
-        "content.json",
-        "out/static/.vite/manifest.json",
-        "src/views/**",
-        "types/**",
-        "build.ts"
+        "app/server/**",
+        "app/content.json",
+        "app/out/static/.vite/manifest.json",
+        "app/src/views/**",
+        "app/types/**",
+        "app/build.ts"
       ],
-      "outputs": ["out/_worker.js"]
+      "outputs": ["app/out/_worker.js"]
     }
   }
 }

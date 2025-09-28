@@ -26,7 +26,6 @@ function assetHelper(originalPath: string, isDev: boolean, manifest?: Manifest, 
     return `${base}/${path}`
   }
 
-  // Fallback de segurança
   if (!manifest) return `/${originalPath}`
 
   // Em prod lê o manifest e retorna o caminho para o arquivo hasheado

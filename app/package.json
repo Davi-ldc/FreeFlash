@@ -13,7 +13,7 @@
     "dev:server": "bun --hot ./server/dev.ts",
     "dev": "concurrently --kill-others-on-fail -n FETCH,VITE,SERVE -c cyan,yellow,black \"bun run fetch-sanity\" \"bun run dev:vite\" \"bun run dev:server\"",
     "build:vite": "vite build",
-    "build": "bun build.ts",
+    "build": "bun build.ts && shx cp server/config/_headers out/static",
     "lint": "stylelint '**/*.scss' && eslint .",
     "lint:fix": "stylelint '**/*.scss' --fix && eslint . --fix",
     "format": "prettier --write ."
@@ -48,7 +48,8 @@
     "@kitajs/ts-html-plugin": "^4.1.3",
     "@sanity/client": "^6.22.2",
     "@sanity/image-url": "^1.1.0",
-    "elysia": "^1.4.7",
-    "glob": "^11.0.3"
+    "elysia": "1.4.7",
+    "glob": "^11.0.3",
+    "shx": "^0.4.0"
   }
 }

@@ -9,6 +9,7 @@
   ],
   "packageManager": "bun@1.2.21",
   "scripts": {
+    "login": "bunx wrangler login",
     "dev:cms": "bun run --cwd ./cms dev",
     "dev:app": "bun run --cwd ./app dev",
     "dev": "concurrently --names \"CMS,APP\" -c \"bgBlue.bold,bgGreen.bold\" \"bun run dev:cms\" \"bun run dev:app\"",
@@ -21,7 +22,7 @@
     "@kitajs/ts-html-plugin": "^4.1.3",
     "@sanity/client": "^7.11.2",
     "@types/bun": "^1.2.22",
-    "wrangler": "^4.38.0"
+    "wrangler": "^4.40.2"
   },
   "devDependencies": {
     "bun": "^1.2.22",
