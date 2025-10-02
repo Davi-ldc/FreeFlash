@@ -1,55 +1,41 @@
 {
-  "name": "app",
-  "version": "1.0.0",
-  "type": "module",
-  "engines": {
-    "node": ">=20.x"
-  },
-  "sideEffects": false,
-  "scripts": {
-    "analyze": "bun build.ts --debug && bun server/utils/analyze.ts",
-    "fetch:sanity": "bun fetch-sanity.ts",
-    "dev:vite": "vite",
-    "dev:server": "bun --hot ./server/dev.ts",
-    "dev": "concurrently --kill-others-on-fail -n FETCH,VITE,SERVE -c cyan,yellow,black \"bun run fetch-sanity\" \"bun run dev:vite\" \"bun run dev:server\"",
-    "build:vite": "vite build",
-    "build": "bun build.ts && shx cp server/config/_headers out/static",
-    "lint": "stylelint '**/*.scss' && eslint .",
-    "lint:fix": "stylelint '**/*.scss' --fix && eslint . --fix",
-    "format": "prettier --write ."
-  },
-  "devDependencies": {
-    "@hono/node-server": "^1.15.0",
-    "@types/locomotive-scroll": "^4.1.4",
-    "@types/node": "^24.0.13",
-    "@typescript-eslint/eslint-plugin": "^8.44.0",
-    "dotenv": "^16.5.0",
-    "eslint": "^9.35.0",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-unused-imports": "^4.2.0",
-    "open-cli": "^8.0.0",
-    "prettier": "^3.6.2",
-    "prettier-plugin-sort-json": "^4.1.1",
-    "sass-embedded": "^1.89.1",
-    "source-map-explorer": "^2.5.3",
-    "stylelint": "^16.24.0",
-    "stylelint-config-standard-scss": "^16.0.0",
-    "stylelint-order": "^7.0.0",
-    "stylelint-scss": "^6.12.1",
-    "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.0",
-    "vite": "^6.3.5"
-  },
-  "dependencies": {
-    "@cloudflare/workers-types": "^4.20250920.0",
-    "@elysiajs/html": "^1.4.0",
-    "@kitajs/html": "^4.2.10",
-    "@kitajs/ts-html-plugin": "^4.1.3",
-    "@sanity/client": "^6.22.2",
-    "@sanity/image-url": "^1.1.0",
-    "elysia": "1.4.7",
-    "glob": "^11.0.3",
-    "shx": "^0.4.0"
-  }
+	"dependencies": {
+		"@biomejs/biome": "^2.2.4",
+		"@cloudflare/workers-types": "^4.20250920.0",
+		"@elysiajs/html": "^1.4.0",
+		"@kitajs/html": "^4.2.10",
+		"@kitajs/ts-html-plugin": "^4.1.3",
+		"@sanity/client": "^6.22.2",
+		"@sanity/image-url": "^1.1.0",
+		"elysia": "1.4.7",
+		"glob": "^11.0.3"
+	},
+	"devDependencies": {
+		"dotenv": "^16.5.0",
+		"sass-embedded": "^1.89.1",
+		"stylelint": "^16.24.0",
+		"stylelint-config-standard-scss": "^16.0.0",
+		"stylelint-order": "^7.0.0",
+		"stylelint-scss": "^6.12.1",
+		"typescript": "^5.9.2",
+		"vite": "^7.1.7"
+	},
+	"engines": {
+		"node": ">=20.x"
+	},
+	"name": "app",
+	"scripts": {
+		"analyze": "bun build.ts --debug && bun server/utils/analyze.ts",
+		"build": "bun build.ts && shx cp server/config/_headers out/static",
+		"build:vite": "vite build",
+		"dev": "concurrently --kill-others-on-fail -n FETCH,VITE,SERVE -c cyan,yellow,black \"bun run fetch-sanity\" \"bun run dev:vite\" \"bun run dev:server\"",
+		"dev:server": "bun --hot ./server/dev.ts",
+		"dev:vite": "vite",
+		"fetch:sanity": "bun fetch-sanity.ts",
+		"format": "biome format --write .",
+		"lint": "biome lint . && stylelint '**/*.scss'",
+		"lint:fix": "biome check --write --verbose . && stylelint '**/*.scss' --fix"
+	},
+	"type": "module",
+	"version": "1.0.0"
 }

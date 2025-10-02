@@ -5,5 +5,11 @@
   "compatibility_date": "2025-06-01",
   "assets": {
     "directory": "app/out/static"
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "CONTENT_KV",
+      "id": "${CLOUDFLARE_KV_NAMESPACE_ID}"
+    }
+  ]
 }

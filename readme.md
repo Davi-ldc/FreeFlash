@@ -224,3 +224,11 @@ Contribuições, issues e sugestões são muito bem-vindas!
 ## Observações sobre o github codespaces->
 
 Se tiver rodando nele lembra de deixar as portas como publicas e de abrir o navegado com cors desativado
+
+https://dash.cloudflare.com/[SEU_ACCOUNT_ID]/
+
+Vai em Compute (Workers), seleciona o worker principal e adiciona um KV em "Bindings" dps em:
+https://dash.cloudflare.com/[SEU_ACCOUNT_ID]/workers/kv/namespaces
+https://dash.cloudflare.com/profile/api-tokens crie um token com permissão de leitura e escrita em Workers KV ou usa o preset: Edit Cloudflare Workers
+
+bunx wrangler kv namespace create CONTENT_KV -> Vai

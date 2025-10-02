@@ -5,7 +5,7 @@
  * @param t - O fator de interpolação (0 a 1).
  */
 export function lerp(p1: number, p2: number, t: number): number {
-  return p1 + (p2 - p1) * t
+	return p1 + (p2 - p1) * t
 }
 
 /**
@@ -15,16 +15,16 @@ export function lerp(p1: number, p2: number, t: number): number {
  * @param delay - O tempo de espera em milissegundos.
  */
 //cria um tipo generico
-export function debounce<T extends any[]>(
-  fn: (...args: T) => void, // que é usado nos args da função pra não perder a typagem
-  delay: number,
+export function debounce<T extends unknown[]>(
+	fn: (...args: T) => void, // que é usado nos args da função pra não perder a typagem
+	delay: number,
 ): (...args: T) => void {
-  let timeout: ReturnType<typeof setTimeout>
+	let timeout: ReturnType<typeof setTimeout>
 
-  return (...args: T) => {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => fn(...args), delay)
-  }
+	return (...args: T) => {
+		clearTimeout(timeout)
+		timeout = setTimeout(() => fn(...args), delay)
+	}
 }
 
 /* 
@@ -74,52 +74,52 @@ então cada vez que a função é chamada, ela pode acessar e modificar o mesmo 
  * @param fn - A função que será limitada.
  * @param limit - O intervalo mínimo em milissegundos entre as chamadas.
  */
-export function throttle<T extends any[]>(
-  fn: (...args: T) => void, //pede pro typescript inferir o typo de args com generics
-  limit: number,
+export function throttle<T extends unknown[]>(
+	fn: (...args: T) => void, //pede pro typescript inferir o typo de args com generics
+	limit: number,
 ): (...args: T) => void {
-  //retorna uma função de argumentos ...args de typo T que retorna void
+	//retorna uma função de argumentos ...args de typo T que retorna void
 
-  let lastCall = 0
-  //isso por que o retorno de setTimeout depende do ambiente, em  DOM é number e no node é NodeJS.Timeout
-  let timeoutId: ReturnType<typeof setTimeout> | null = null
+	let lastCall = 0
+	//isso por que o retorno de setTimeout depende do ambiente, em  DOM é number e no node é NodeJS.Timeout
+	let timeoutId: ReturnType<typeof setTimeout> | null = null
 
-  return (...args: T) => {
-    const now = performance.now()
+	return (...args: T) => {
+		const now = performance.now()
 
-    //se já passou limit segundos desde a ultima chamada
-    if (now - lastCall >= limit) {
-      if (timeoutId) {
-        //limpa o timeout se existir
-        clearTimeout(timeoutId)
-        timeoutId = null
-      }
-      lastCall = now
-      fn(...args) //e roda a função
-    }
-    // Se o o intervalo entre as chamadas for menor que limit e o timeout nao existir
-    else if (!timeoutId) {
-      timeoutId = setTimeout(
-        () => {
-          //seta um timeout pra rodar dps
-          lastCall = performance.now() //atualiza lastCall
-          timeoutId = null //e timeoutId
-          fn(...args)
-        },
-        limit - (now - lastCall),
-      ) //tempo que falta pra atingir limit
-    }
-  }
+		//se já passou limit segundos desde a ultima chamada
+		if (now - lastCall >= limit) {
+			if (timeoutId) {
+				//limpa o timeout se existir
+				clearTimeout(timeoutId)
+				timeoutId = null
+			}
+			lastCall = now
+			fn(...args) //e roda a função
+		}
+		// Se o o intervalo entre as chamadas for menor que limit e o timeout nao existir
+		else if (!timeoutId) {
+			timeoutId = setTimeout(
+				() => {
+					//seta um timeout pra rodar dps
+					lastCall = performance.now() //atualiza lastCall
+					timeoutId = null //e timeoutId
+					fn(...args)
+				},
+				limit - (now - lastCall),
+			) //tempo que falta pra atingir limit
+		}
+	}
 }
 /*é mais pro webgl, pra atualizar hovers e scroll ainda é melhor debounce */
 
 export function hexToRGB(hex: string): [number, number, number] {
-  hex = hex.replace(/^#/, '')
-  const r = parseInt(hex.substring(0, 2), 16)
-  const g = parseInt(hex.substring(2, 4), 16)
-  const b = parseInt(hex.substring(4, 6), 16)
+	hex = hex.replace(/^#/, '')
+	const r = parseInt(hex.substring(0, 2), 16)
+	const g = parseInt(hex.substring(2, 4), 16)
+	const b = parseInt(hex.substring(4, 6), 16)
 
-  return [r, g, b]
+	return [r, g, b]
 }
 
 // Tipo union para elementos que podem ser passados para as funções de will-change
@@ -138,17 +138,15 @@ type ElementOrElements = HTMLElement | NodeList | HTMLElement[]
  * addWillChange(document.querySelector('.my-element'), 'opacity');
  */
 export function addWillChange(elements: ElementOrElements, properties: string): void {
-  if (NodeList.prototype.isPrototypeOf(elements) || Array.isArray(elements)) {
-    ;
-
-(elements as NodeList | HTMLElement[]).forEach((element) => {
-      if (element instanceof HTMLElement) {
-        element.style.willChange = properties
-      }
-    })
-  } else if (elements instanceof HTMLElement) {
-    elements.style.willChange = properties
-  }
+	if (elements instanceof NodeList || Array.isArray(elements)) {
+		;(elements as NodeList | HTMLElement[]).forEach((element) => {
+			if (element instanceof HTMLElement) {
+				element.style.willChange = properties
+			}
+		})
+	} else if (elements instanceof HTMLElement) {
+		elements.style.willChange = properties
+	}
 }
 
 /**
@@ -163,17 +161,15 @@ export function addWillChange(elements: ElementOrElements, properties: string): 
  * removeWillChange(document.querySelector('.my-element'));
  */
 export function removeWillChange(elements: ElementOrElements): void {
-  if (NodeList.prototype.isPrototypeOf(elements) || Array.isArray(elements)) {
-    ;
-
-(elements as NodeList | HTMLElement[]).forEach((element) => {
-      if (element instanceof HTMLElement) {
-        element.style.willChange = ''
-      }
-    })
-  } else if (elements instanceof HTMLElement) {
-    elements.style.willChange = ''
-  }
+	if (elements instanceof NodeList || Array.isArray(elements)) {
+		;(elements as NodeList | HTMLElement[]).forEach((element) => {
+			if (element instanceof HTMLElement) {
+				element.style.willChange = ''
+			}
+		})
+	} else if (elements instanceof HTMLElement) {
+		elements.style.willChange = ''
+	}
 }
 
 /**
@@ -185,36 +181,36 @@ export function removeWillChange(elements: ElementOrElements): void {
  * @returns Uma função que recebe um valor t (0 a 1) e retorna o valor interpolado.
  */
 export function cubicBezier(x1: number, y1: number, x2: number, y2: number) {
-  // Bezier cúbica: P0=(0,0), P3=(1,1)
-  const ax = 3 * x1 - 3 * x2 + 1,
-    bx = -6 * x1 + 3 * x2,
-    cx = 3 * x1
+	// Bezier cúbica: P0=(0,0), P3=(1,1)
+	const ax = 3 * x1 - 3 * x2 + 1,
+		bx = -6 * x1 + 3 * x2,
+		cx = 3 * x1
 
-  const ay = 3 * y1 - 3 * y2 + 1,
-    by = -6 * y1 + 3 * y2,
-    cy = 3 * y1
+	const ay = 3 * y1 - 3 * y2 + 1,
+		by = -6 * y1 + 3 * y2,
+		cy = 3 * y1
 
-  const sampleX = (u: number) => ((ax * u + bx) * u + cx) * u
-  const sampleY = (u: number) => ((ay * u + by) * u + cy) * u
+	const sampleX = (u: number) => ((ax * u + bx) * u + cx) * u
+	const sampleY = (u: number) => ((ay * u + by) * u + cy) * u
 
-  // Dado t (tempo), acha u tal que x(u)≈t e retorna y(u)
-  return (t: number) => {
-    t = Math.min(1, Math.max(0, t))
-    // busca binária robusta (evita dependência de derivada)
-    let u0 = 0,
-      u1 = 1,
-      u = t
+	// Dado t (tempo), acha u tal que x(u)≈t e retorna y(u)
+	return (t: number) => {
+		t = Math.min(1, Math.max(0, t))
+		// busca binária robusta (evita dependência de derivada)
+		let u0 = 0,
+			u1 = 1,
+			u = t
 
-    for (let i = 0; i < 20; i++) {
-      const x = sampleX(u) - t
+		for (let i = 0; i < 20; i++) {
+			const x = sampleX(u) - t
 
-      if (Math.abs(x) < 1e-6) break
+			if (Math.abs(x) < 1e-6) break
 
-      if (x > 0) u1 = u
-      else u0 = u
-      u = 0.5 * (u0 + u1)
-    }
+			if (x > 0) u1 = u
+			else u0 = u
+			u = 0.5 * (u0 + u1)
+		}
 
-    return sampleY(u)
-  }
+		return sampleY(u)
+	}
 }

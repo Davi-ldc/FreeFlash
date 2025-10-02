@@ -1,21 +1,21 @@
 {
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "@kitajs/html",
-    "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "lib": ["ESNext", "DOM"],
-    "strict": true,
-    "types": ["@cloudflare/workers-types"],
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src",
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "exclude": ["node_modules", "dist"],
-  "include": ["src/**/*", "*.ts", "server/**/*", "server/api/**/*", "eslint.config.js", "build.js"]
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": ".",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"jsx": "react-jsx",
+		"jsxImportSource": "@kitajs/html",
+		"lib": ["ESNext", "DOM"],
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"plugins": [{ "name": "@kitajs/ts-html-plugin" }],
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"target": "ESNext",
+		"types": ["@cloudflare/workers-types"]
+	},
+	"exclude": ["node_modules", "dist"],
+	"include": ["src/**/*", "*.ts", "server/**/*", "server/api/**/*", "eslint.config.js", "build.js"]
 }

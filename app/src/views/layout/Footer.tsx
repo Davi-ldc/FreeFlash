@@ -1,13 +1,9 @@
 interface FooterProps {
-  text?: string
+	text?: string
 }
 
 const Footer = (props: FooterProps) => {
-  return (
-    <>
-      <footer class="footer">{props.text}</footer>
-    </>
-  )
+	return <footer class="footer">{props.text}</footer>
 }
 
 export default Footer

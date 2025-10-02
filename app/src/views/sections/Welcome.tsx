@@ -1,9 +1,9 @@
 export interface WelcomeProps {
-  text: string
+	text: string
 }
 
 const Welcome = ({ text }: WelcomeProps) => {
-  return <section class="welcome">{text}</section>
+	return <section class="welcome">{text}</section>
 }
 
 export default Welcome
