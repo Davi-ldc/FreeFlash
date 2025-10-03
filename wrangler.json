@@ -1,15 +1,15 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "freeflash",
-  "main": "app/out/_worker.js",
-  "compatibility_date": "2025-06-01",
-  "assets": {
-    "directory": "app/out/static"
-  },
-  "kv_namespaces": [
-    {
-      "binding": "CONTENT_KV",
-      "id": "${CLOUDFLARE_KV_NAMESPACE_ID}"
-    }
-  ]
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"assets": {
+		"directory": "app/out/static"
+	},
+	"compatibility_date": "2025-06-01",
+	"kv_namespaces": [
+		{
+			"binding": "CONTENT_KV",
+			"id": "${CLOUDFLARE_KV_NAMESPACE_ID}"
+		}
+	],
+	"main": "app/out/_worker.js",
+	"name": "freeflash"
 }

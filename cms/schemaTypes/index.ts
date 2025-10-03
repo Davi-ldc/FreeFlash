@@ -1,16 +1,16 @@
-import {defineType} from 'sanity'
+import { defineType } from 'sanity'
 
 export const schemaTypes = [
-  defineType({
-    name: 'simpleText',
-    title: 'Simple Text',
-    type: 'document',
-    fields: [
-      {
-        name: 'text',
-        title: 'Text',
-        type: 'string',
-      },
-    ],
-  }),
+	defineType({
+		fields: [
+			{
+				name: 'text',
+				title: 'Text',
+				type: 'string',
+			},
+		],
+		name: 'simpleText',
+		title: 'Simple Text',
+		type: 'document',
+	}),
 ]

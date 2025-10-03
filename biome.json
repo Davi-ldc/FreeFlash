@@ -11,7 +11,8 @@
 		}
 	},
 	"files": {
-		"includes": ["**", "!**/out", "!**/node_modules", "!**/.turbo", "!**/static", "!**/dist", "!**/.sanity"]
+		"includes": ["**", "!**/out", "!**/node_modules", "!**/.turbo", "!**/static", "!**/dist", "!**/.sanity"],
+		"ignoreUnknown": true
 	},
 
 	"formatter": {
@@ -53,7 +54,7 @@
 					}
 				}
 			},
-			"includes": ["package.json"]
+			"includes": ["**/package.json", "**/turbo.json", "**/biome.json", "**/bun.lock"]
 		}
 	]
 }

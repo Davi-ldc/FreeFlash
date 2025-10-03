@@ -13,7 +13,7 @@ dotenv.config({ path: path.resolve(__dirname, '.env') })
 const client = createClient({
 	apiVersion: '2025-02-19',
 	dataset: 'production',
-	projectId: process.env.SANITY_PROJECT_ID,
+	projectId: process.env.SANITY_STUDIO_PROJECT_ID,
 	useCdn: true,
 })
 

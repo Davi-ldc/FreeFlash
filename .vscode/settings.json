@@ -1,11 +1,5 @@
 {
-	//Settings básicas para o Biome
-	"editor.formatOnSave": true,
-	"editor.defaultFormatter": "biomejs.biome",
 	"[javascript]": {
-		"editor.defaultFormatter": "biomejs.biome"
-	},
-	"[typescript]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
 	"[json]": {
@@ -14,19 +8,24 @@
 	"[jsonc]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
 
 	//Stylelint para SCSS
 	"css.validate": false,
-	"less.validate": false,
-	"scss.validate": false,
-	"stylelint.enable": true,
-	"stylelint.validate": ["scss"],
-	"stylelint.configFile": "./app/stylelint.config.js",
 
 	"editor.codeActionsOnSave": {
-		"source.organizeImports.biome": "explicit",
+		"source.action.useSortedKeys.biome": "explicit",
 		"source.fixAll.biome": "explicit",
-		"source.action.useSortedKeys.biome": "explicit"
-	}
-
+		"source.organizeImports.biome": "explicit"
+	},
+	"editor.defaultFormatter": "biomejs.biome",
+	//Settings básicas para o Biome
+	"editor.formatOnSave": true,
+	"less.validate": false,
+	"scss.validate": false,
+	"stylelint.configFile": "./app/stylelint.config.js",
+	"stylelint.enable": true,
+	"stylelint.validate": ["scss"]
 }
