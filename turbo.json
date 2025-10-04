@@ -1,0 +1,29 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"tasks": {
+		"app#build": {
+			"cache": true,
+			"dependsOn": ["app#build:vite"],
+			"inputs": [
+				"app/server/**",
+				"app/out/static/.vite/manifest.json",
+				"app/src/views/**",
+				"app/types/**",
+				"app/build.ts"
+			],
+			"outputs": ["app/out/_worker.js"]
+		},
+		"app#build:vite": {
+			"cache": true,
+			"inputs": ["app/src/**/*", "app/types/**", "app/vite.config.ts"],
+			"outputs": ["app/out/static/**"]
+		},
+
+		"app#fetch:sanity": {
+			"cache": false,
+			"env": ["SANITY_PROJECT_ID"],
+			"inputs": ["app/fetch-sanity.ts", "app/types/sanity.ts"],
+			"outputs": ["app/content.json"]
+		}
+	}
+}

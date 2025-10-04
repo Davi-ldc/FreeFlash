@@ -1,0 +1,60 @@
+{
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on",
+				"useSortedAttributes": "on",
+				"useSortedKeys": "on",
+				"useSortedProperties": "on"
+			}
+		}
+	},
+	"files": {
+		"includes": ["**", "!**/out", "!**/node_modules", "!**/.turbo", "!**/static", "!**/dist", "!**/.sanity"],
+		"ignoreUnknown": true
+	},
+
+	"formatter": {
+		"lineWidth": 120
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single",
+			"semicolons": "asNeeded",
+			"trailingCommas": "all"
+		}
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"correctness": {
+				"noUnusedImports": "error",
+				"noUnusedVariables": "error"
+			},
+			"recommended": true,
+			"style": {
+				"noUnusedTemplateLiteral": "error",
+				"useBlockStatements": "off",
+				"useConst": "error",
+				"useDefaultParameterLast": "error",
+				"useNodejsImportProtocol": "off"
+			},
+			"suspicious": {
+				"noExplicitAny": "warn"
+			}
+		}
+	},
+	"overrides": [
+		{
+			"assist": {
+				"actions": {
+					"source": {
+						"useSortedKeys": "off"
+					}
+				}
+			},
+			"includes": ["**/package.json", "**/turbo.json", "**/biome.json", "**/bun.lock"]
+		}
+	]
+}

@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": ".",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"jsx": "react-jsx",
+		"jsxImportSource": "@kitajs/html",
+		"lib": ["ESNext", "DOM"],
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"plugins": [{ "name": "@kitajs/ts-html-plugin" }],
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"target": "ESNext",
+		"types": ["@cloudflare/workers-types"]
+	},
+	"exclude": ["node_modules", "dist"],
+	"include": ["src/**/*", "*.ts", "server/**/*", "server/api/**/*", "eslint.config.js", "build.js"]
+}
