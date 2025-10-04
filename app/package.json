@@ -19,7 +19,8 @@
 		"@kitajs/html": "^4.2.10",
 		"@sanity/client": "^6.22.2",
 		"@sanity/image-url": "^1.1.0",
-		"elysia": "1.4.7"
+		"elysia": "1.4.7",
+		"shx": "^0.4.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.4",
