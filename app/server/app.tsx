@@ -6,6 +6,7 @@ import type { Manifest } from 'vite'
 import type { LayoutProps, PageModel, SectionMap } from '../src/types/views'
 import Layout from '../src/views/layout'
 
+console.log(Layout)
 export interface AppConfig {
 	isDev: boolean
 	manifest?: Manifest

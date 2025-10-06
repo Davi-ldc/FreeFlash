@@ -3,27 +3,27 @@
 	"tasks": {
 		"app#build": {
 			"cache": true,
+			"env": ["SANITY_PROJECT_ID"],
 			"dependsOn": ["app#build:vite"],
-			"inputs": [
-				"app/server/**",
-				"app/out/static/.vite/manifest.json",
-				"app/src/views/**",
-				"app/types/**",
-				"app/build.ts"
-			],
-			"outputs": ["app/out/_worker.js"]
+			"inputs": ["server/**", "out/static/.vite/manifest.json", "src/views/**", "build.ts"],
+			"outputs": ["out/_worker.js", "out/api/**"]
 		},
 		"app#build:vite": {
 			"cache": true,
-			"inputs": ["app/src/**/*", "app/types/**", "app/vite.config.ts"],
-			"outputs": ["app/out/static/**"]
+			"inputs": ["src/**/*", "vite.config.ts"]
 		},
-
-		"app#fetch:sanity": {
-			"cache": false,
-			"env": ["SANITY_PROJECT_ID"],
-			"inputs": ["app/fetch-sanity.ts", "app/types/sanity.ts"],
-			"outputs": ["app/content.json"]
+		"app#deploy:api-test": {
+			"cache": true,
+			"inputs": ["server/api/test.ts"]
+		},
+		"app#deploy:api-updateKv": {
+			"cache": true,
+			"inputs": ["server/api/updateKv.ts"]
+		},
+		"app#deploy": {
+			"cache": true,
+			"dependsOn": ["app#build", "app#deploy:api-test", "app#deploy:api-updateKv"],
+			"inputs": ["out/_worker.js"]
 		}
 	}
 }

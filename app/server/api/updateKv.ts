@@ -1,60 +1,74 @@
-// import path from 'node:path'
-// import { fileURLToPath } from 'node:url'
-// import dotenv from 'dotenv'
-// import { Elysia } from 'elysia'
-// import { CloudflareAdapter } from 'elysia/adapter/cloudflare-worker'
-// import type { Content } from 'src/types/sanity'
+import { Elysia, t } from 'elysia'
+import { CloudflareAdapter } from 'elysia/adapter/cloudflare-worker'
+import fetchCMS from '../../fetch-cms'
 
-// import fetchCMS from '../../fetch-cms'
+type Env = {
+	SANITY_WEBHOOK_SECRET: string
+	CONTENT_KV: KVNamespace
+}
 
-// const __filename = fileURLToPath(import.meta.url)
-// const __dirname = path.dirname(__filename)
+const app = new Elysia({ adapter: CloudflareAdapter, prefix: '/api/webhook' })
 
-// dotenv.config({ path: path.resolve(__dirname, '.env') })
+app.post(
+	'/sanity',
+	async ({ body, query, set, request }) => {
+		const env = (request as any).env as Env
 
-// async function uploadToKV(data: Content[]) {
-// 	const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID
-// 	const NAMESPACE_ID = process.env.CLOUDFLARE_KV_NAMESPACE_ID
-// 	const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN
+		// Valida configuração
+		if (!env?.SANITY_WEBHOOK_SECRET || !env?.CONTENT_KV) {
+			set.status = 500
+			return { error: 'Configuração inválida' }
+		}
 
-// 	if (!ACCOUNT_ID || !NAMESPACE_ID || !API_TOKEN) {
-// 		console.warn('⚠️  Variáveis do Cloudflare KV não configuradas. Pulando upload para KV.')
-// 		console.warn('   Configure: CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_KV_NAMESPACE_ID, CLOUDFLARE_API_TOKEN')
+		// Valida secret (Sanity envia via query string ou header)
+		const secret = query.secret || request.headers.get('sanity-webhook-secret')
+		
+		if (secret !== env.SANITY_WEBHOOK_SECRET) {
+			set.status = 401
+			return { error: 'Secret inválido' }
+		}
 
-// 		return false
-// 	}
+		// Previne duplicatas e replay attacks
+		// Usa hash do body inteiro para detectar qualquer modificação
+		const bodyHash = await crypto.subtle.digest(
+			'SHA-256',
+			new TextEncoder().encode(JSON.stringify(body))
+		)
+		const hashHex = Array.from(new Uint8Array(bodyHash))
+			.map(b => b.toString(16).padStart(2, '0'))
+			.join('')
+		
+		const lockKey = `lock:${hashHex}`
+		const recentLock = await env.CONTENT_KV.get(lockKey)
+		
+		if (recentLock) {
+			return { message: 'Request duplicada detectada', success: true }
+		}
+		
+		await env.CONTENT_KV.put(lockKey, '1', { expirationTtl: 300 })
 
-// 	try {
-// 		console.log('📤 Enviando para Cloudflare KV...')
+		// Atualiza conteúdo
+		try {
+			const data = await fetchCMS()
+			await env.CONTENT_KV.put('content', JSON.stringify(data))
 
-// 		const response = await fetch(
-// 			`https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/storage/kv/namespaces/${NAMESPACE_ID}/values/content`,
-// 			{
-// 				body: JSON.stringify(data),
-// 				headers: {
-// 					Authorization: `Bearer ${API_TOKEN}`,
-// 					'Content-Type': 'application/json',
-// 				},
-// 				method: 'PUT',
-// 			},
-// 		)
+			return { 
+				message: 'Atualizado com sucesso', 
+				success: true,
+				timestamp: new Date().toISOString()
+			}
+		} catch (error) {
+			console.error('Erro ao atualizar:', error)
+			set.status = 500
+			return { error: 'Erro ao atualizar conteúdo' }
+		}
+	},
+	{ 
+		body: t.Any(),
+		query: t.Object({
+			secret: t.Optional(t.String())
+		})
+	},
+)
 
-// 		if (!response.ok) {
-// 			const error = await response.text()
-// 			throw new Error(`Erro HTTP ${response.status}: ${error}`)
-// 		}
-// 		console.log('✅ Conteúdo enviado para Cloudflare KV com sucesso')
-
-// 		return true
-// 	} catch (error) {
-// 		console.error('❌ Erro ao fazer upload para KV:', error)
-
-// 		return false
-// 	}
-// }
-
-// const data = await fetchCMS()
-// await uploadToKV(data)
-
-// // Export compilado para produção
-// export default updateKvApi.compile()
+export default app.compile()

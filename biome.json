@@ -54,7 +54,7 @@
 					}
 				}
 			},
-			"includes": ["**/package.json", "**/turbo.json", "**/biome.json", "**/bun.lock"]
+			"includes": ["**/package.json", "**/wrangler.json", "**/turbo.json", "**/biome.json", "**/bun.lock"]
 		}
 	]
 }

@@ -9,6 +9,11 @@
 		"analyze": "bun build.ts --debug && bun server/utils/analyze.ts",
 		"build": "bun build.ts && shx cp server/config/_headers out/static",
 		"build:vite": "vite build",
+		"config": "bun deploy.ts config",
+		"deploy": "bun deploy.ts main",
+		"deploy:all": "bun run deploy.ts all",
+		"deploy:api:test": "bun run deploy.ts api test",
+		"deploy:api:updateKv": "bun run deploy.ts api updateKv",
 		"dev": "concurrently --kill-others-on-fail -n FETCH,VITE,SERVE -c cyan,yellow,black \"bun run fetch:cms\" \"bun run dev:vite\" \"bun run dev:server\"",
 		"dev:server": "bun --hot ./server/dev.ts",
 		"dev:vite": "vite",
@@ -16,24 +21,24 @@
 	},
 	"dependencies": {
 		"@elysiajs/html": "^1.4.0",
-		"@kitajs/html": "^4.2.10",
-		"@sanity/client": "^6.22.2",
-		"@sanity/image-url": "^1.1.0",
-		"elysia": "1.4.7",
-		"shx": "^0.4.0"
+		"@sanity/client": "^6.29.1",
+		"@sanity/image-url": "^1.2.0",
+		"elysia": "1.4.9",
+		"shx": "^0.4.0",
+		"svix": "^1.76.1"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.2.4",
-		"@cloudflare/workers-types": "^4.20250920.0",
+		"@cloudflare/workers-types": "^4.2.0",
+		"@kitajs/html": "^4.2.10",
 		"@kitajs/ts-html-plugin": "^4.1.3",
-		"dotenv": "^16.5.0",
+		"dotenv": "^16.6.1",
 		"glob": "^11.0.3",
-		"sass-embedded": "^1.89.1",
-		"stylelint": "^16.24.0",
+		"sass-embedded": "^1.93.2",
+		"stylelint": "^16.25.0",
 		"stylelint-config-standard-scss": "^16.0.0",
 		"stylelint-order": "^7.0.0",
 		"stylelint-scss": "^6.12.1",
-		"typescript": "^5.9.2",
-		"vite": "^7.1.7"
+		"typescript": "^5.9.3",
+		"vite": "^7.1.9"
 	}
 }

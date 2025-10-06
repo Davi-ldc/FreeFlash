@@ -14,8 +14,7 @@
 		"skipLibCheck": true,
 		"strict": true,
 		"target": "ESNext",
-		"types": ["@cloudflare/workers-types"]
+		"types": ["@cloudflare/workers-types", "vite/client"]
 	},
-	"exclude": ["node_modules", "dist"],
-	"include": ["src/**/*", "*.ts", "server/**/*", "server/api/**/*", "eslint.config.js", "build.js"]
+	"exclude": ["node_modules", "dist"]
 }

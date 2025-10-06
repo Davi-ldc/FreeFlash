@@ -1,14 +1,6 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { createClient } from '@sanity/client'
 // import imageUrlBuilder from '@sanity/image-url'
-import dotenv from 'dotenv'
 import type { Content } from 'src/types/sanity'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-dotenv.config({ path: path.resolve(__dirname, '.env') })
 
 const client = createClient({
 	apiVersion: '2025-02-19',

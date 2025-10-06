@@ -3,4 +3,6 @@ dist
 .env
 .DS_Store
 .turbo
+.wrangler
 out
+wrangler.deploy.json

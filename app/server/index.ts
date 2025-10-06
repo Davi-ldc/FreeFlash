@@ -1,4 +1,3 @@
-// Type assertion para o manifest
 import type { Manifest } from 'vite'
 import manifestData from '../out/static/.vite/manifest.json'
 import { createApp } from './app'
@@ -14,6 +13,6 @@ const app = createApp({
 	manifest,
 	viteCSS: `/${manifest['src/main.ts'].css[0]}`,
 	viteJS: `/${manifest['src/main.ts'].file}`,
-}).compile()
+})
 
-export default app
+export default app.compile()

@@ -232,3 +232,9 @@ https://dash.cloudflare.com/[SEU_ACCOUNT_ID]/workers/kv/namespaces
 https://dash.cloudflare.com/profile/api-tokens crie um token com permissão de leitura e escrita em Workers KV ou usa o preset: Edit Cloudflare Workers
 
 bunx wrangler kv namespace create CONTENT_KV -> Vai
+
+Se o vite mudar eu tenho que rodar build denovo por causa do manifest :(
+
+daria pra usar promisse.all no deploy mas ai teria que fazer cache manual sem turborepo
+
+Gera um hash -> node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"

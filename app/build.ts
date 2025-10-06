@@ -7,11 +7,10 @@ const API_DIR = 'out/api'
 const debug = process.argv.includes('--debug')
 
 const BuildSettings = {
-	external: ['node:*', 'stream', 'buffer', 'events', 'process'] as string[],
 	format: 'esm',
 	minify: true,
 	splitting: false,
-	target: 'browser',
+	target: 'browser', //sem fs pra rodar em edge
 	tsconfig: './tsconfig.json',
 } as const
 
@@ -41,7 +40,7 @@ async function buildWorker() {
 }
 
 async function buildApis() {
-	fs.rmSync(API_DIR, { force: true, recursive: true })
+	fs.rmSync(API_DIR, { force: true, recursive: true }) // Limpa a pasta antiga
 	fs.mkdirSync(API_DIR, { recursive: true })
 
 	const apiEntries = fs.readdirSync('./server/api').filter((file) => ['.ts', '.tsx'].includes(path.extname(file)))
