@@ -1,12 +1,15 @@
 import { html } from '@elysiajs/html'
 import { Elysia } from 'elysia'
 import { CloudflareAdapter } from 'elysia/adapter/cloudflare-worker'
-import type { Manifest } from 'vite'
 
+import type { Content } from 'src/types/sanity'
+import type { Manifest } from 'vite'
+import ContentData from '../content.json'
 import type { LayoutProps, PageModel, SectionMap } from '../src/types/views'
 import Layout from '../src/views/layout'
 
-console.log(Layout)
+const content = ContentData as Content[]
+
 export interface AppConfig {
 	isDev: boolean
 	manifest?: Manifest
@@ -57,10 +60,7 @@ export function createApp(config: AppConfig) {
 
 	app.get('/', () => {
 		const page: PageModel = {
-			content: [
-				section('welcome', { text: 'Bem-vindo ao FreeFlash!' }),
-				section('welcome', { text: 'Esta é uma seção de boas-vindas.' }),
-			],
+			content: [section('welcome', { text: content[0].text }), section('welcome', { text: content[0].OtherText })],
 		}
 
 		const props: LayoutProps = {

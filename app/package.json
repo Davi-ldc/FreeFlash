@@ -6,14 +6,16 @@
 		"node": ">=20.x"
 	},
 	"scripts": {
-		"analyze": "bun build.ts --debug && bun server/utils/analyze.ts",
-		"build": "bun build.ts && shx cp server/config/_headers out/static",
+		"sync-secrets": "bun utils/sync-secrets.ts",
+		"analyze": "bun build.ts main --debug && bun utils/analyze.ts",
+		"build": "bun build.ts main && shx cp server/config/_headers out/static",
+		"build:apis": "bun build.ts api",
 		"build:vite": "vite build",
 		"config": "bun deploy.ts config",
 		"deploy": "bun deploy.ts main",
 		"deploy:all": "bun run deploy.ts all",
-		"deploy:api:test": "bun run deploy.ts api test",
-		"deploy:api:updateKv": "bun run deploy.ts api updateKv",
+		"deploy:api:exemple": "bun run deploy.ts api exemple",
+		"deploy:api:webhook": "bun run deploy.ts api webhook",
 		"dev": "concurrently --kill-others-on-fail -n FETCH,VITE,SERVE -c cyan,yellow,black \"bun run fetch:cms\" \"bun run dev:vite\" \"bun run dev:server\"",
 		"dev:server": "bun --hot ./server/dev.ts",
 		"dev:vite": "vite",
@@ -24,8 +26,7 @@
 		"@sanity/client": "^6.29.1",
 		"@sanity/image-url": "^1.2.0",
 		"elysia": "1.4.9",
-		"shx": "^0.4.0",
-		"svix": "^1.76.1"
+		"shx": "^0.4.0"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.2.0",

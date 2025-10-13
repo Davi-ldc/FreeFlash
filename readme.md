@@ -1,240 +1,96 @@
 # FreeFlash 🚀
 
-Uma dev stack opinativa, simples, rápida e com o menor curto de hospedagem possivel, inspirada pelo [Lisergia](https://github.com/bizarro/lisergia).
+An opinionated, simple, scalable dev stack optimized for hosting cost reduction.
 
 ## Features
 
-- ⚡ **Super Rápido:** SSR com Vercel Edge Functions, Hono e Eta.js pré-compilado. O resultado é _cold starts_ **9x menores** que funções serverless tradicionais e _warm starts_ **2x mais rápidos**.
-- 💰 **Custo Quase Zero:** Projetado para funcionar com margem dentro dos planos gratuitos da Vercel e do Sanity. Seu único custo fixo é o domínio (~R$ 65/ano).
-- ⚙️ **Builds Otimizados:** Usa Turborepo para cachear templates Eta.js e assets do Vite. O bundle final pesa incríveis ✨ **9.02KB** ✨ (gziped)
-- 🤟🏻 **Ultilitários WebGPU (em desenvolvimento):** Eles vão facilitar animações com shaders em imagens ou textos, a ideia é algo tipo o threejs só que super minimalista e focado em imagens e textos.
-- 🤖 **CMS:** Sanity.io como um Headless CMS "all-code".
-- 🛠️ **Stack Moderna:** TypeScript, Vite, SCSS, Eta.js no Front-end e Hono como Back-end
+- 💰 **Free:** Within the limits of 100k requests per day (static assets doesent count), you only need to pay for the domain (11 USD/year). If you need more than that, with 5 USD/month you can get up to 10M requests.
+- ⚡ **Flash:** SSR on Cloudflare Workers with Elysia. [Running on edge leads to **9x smaller** _cold starts_ than traditional serverless functions and **2x faster** _warm starts_](https://www.openstatus.dev/blog/monitoring-latency-vercel-edge-vs-serverless). Usando elysia@html o site gasta em média 0.4cpu-ms pra responder a requisição.
 
-## Instalação
+
+## Installation
 
 ```bash
 git clone https://github.com/Davi-ldc/FreeFlash.git
 cd FreeFlash
 ```
 
-Em `/cms` crie um novo projeto Sanity.
+In `/cms` create a new Sanity project:
 
 ```bash
 cd cms
 bun create sanity@latest
 ```
 
-E um `.env` na pasta `app` com:
+Create a `.env` file in the `app` folder with:
 
 ```env
-SANITY_PROJECT_ID=XXXXXXXX
-RESEND_API_KEY=re_XXXXXXXXXXXXXX
+SANITY_STUDIO_PROJECT_ID=xxxxxxxx
+SANITY_WEBHOOK_SECRET=xxxxxxxxxx
+SANITY_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+CLOUDFLARE_ACCOUNT_ID=xxxxxxxxxxxxxxxxxxxxxxxx
+CLOUDFLARE_API_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+GITHUB_REPO=yourusername/yourrepo
+GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+TURBO_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+TURBO_TEAM=yourteamname
 ```
 
-Depois é so rodar:
+Then run:
 
 ```bash
 bun i
 
-# (Sanity e App)
+# Run both Sanity and App
 bun dev
 
-# build manual do app
+# Manual build of the app
 bun run build
-JSX -> 20.5KB
-# Comandos específicos por workspace
+
+# Workspace-specific commands
 bun dev:app
 bun dev:cms
 
-# Analisa o tamanho do bundle do servidor (depois de rodar build)
+# Analyze server bundle size (after running build)
 cd app
 bun run analyze
 
-# Ou em root
+# Or from root
 bun run a
 ```
 
----
+## Setup
 
-## Deploy na Vercel
+### Cloudflare Configuration
 
-📋 Configurar GitHub Actions
+Go to https://dash.cloudflare.com/[YOUR_ACCOUNT_ID]/
 
-Vá em Settings > Secrets > Actions no seu repo
-Adicione estes secrets:
+Navigate to Compute (Workers), select your main worker and add a KV in "Bindings", then go to:
+- https://dash.cloudflare.com/[YOUR_ACCOUNT_ID]/workers/kv/namespaces
+- https://dash.cloudflare.com/profile/api-tokens - create a token with read and write permissions for Workers KV or use the preset: "Edit Cloudflare Workers"
 
-CLOUDFLARE_ACCOUNT_ID - Execute bunx wrangler whoami para obter
-CLOUDFLARE_API_TOKEN - Crie em https://dash.cloudflare.com/profile/api-tokens
-SANITY_PROJECT_ID - ID do seu projeto Sanity
-
----
-
-## Deploy do CMS (Sanity Studio)
-
+Run:
 ```bash
-cd cms
-npx sanity deploy
+bunx wrangler kv namespace create CONTENT_KV
 ```
 
----
+### Generate Webhook Secret
 
-## Processo de Build
-
-São 4 tarefas cacheadas pelo turborepo:
-
-- `build:vite (cacheado)` → Compila o SCSS e TS e processa os assets otimizando eles com um hash.
-- `fetch:sanity (sem cache)` → Lê todos os dados do CMS, preprocessa eles e salva em um `content.json`.
-- `precompileTemplates (cacheado)` → Transforma os templates Eta.js em funções JavaScript.
-- `build` → Esse é mais complexo:
-  - Primeiro compilamos index.ts com tsup para `vercel/output/functions/index.func/`, no formato:
-    - **CommonJS (.cjs)** para Node
-    - **ESM (.js)** para edge
-  - Depois copiamos:
-    - `server/.vc-config.json` → `.vercel/output/functions/index.func/` (ele especifica o runtime e o arquivo com a função)
-    - `server/vercel.config.json` → `.vercel/output/config.json` (nesse caso eu estou renomeando também) configurações gerais do Vercel
-
-No final fica assim:
-
-```text
-.vercel/output/
-├── config.json              # Define rotas e configurações das funções
-├── static/                  # Assets estáticos do Vite
-│   └── assets/
-│       └── ...
-└── functions/
-    └── index.func/
-        ├── .vc-config.json  # Configuração da função
-        └── index.js         # Código compilado do Hono
+Generate a hash:
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-### Sobre as configurações do Vercel (server/config/vercel.config.json)
+### Sanity Token
 
-```json
-{
-  "version": 3,
-  "routes": [
-    {
-      "src": "/assets/(.*)",
-      // Como estamos usando vite para preprocessar os assets os arquivos são imutaveis e
-      // a CDN ou o próprio navegador podem fazer cache deles por 1 ano (31536000 segundos)
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
-      // Isso faz com que antes de seguir para um redirecionamento, o Vercel cheque se o arquivo existe no sistema de arquivos
-      // Tipo GET /assets/js/main.BSI2MmxF.js → ele serve direto de .vercel/output/static/assets/js/
-      "handle": "filesystem"
-    },
-    {
-      // Qualquer rota que não seja /api/* e não tenha sido resolvida com arquivos físicos vai para /index
-      "src": "/((?!api/).*)",
-      "dest": "/index"
-    }
-  ]
-}
-```
+In Sanity, go to Settings → API → Tokens → Editor. Create a token named something like "Cloudflare Worker Sync Token" with:
+- Read and write access to all datasets, with limited access to project settings (Tokens: read+write)
 
-## Desenvolvimento
+## Notes
 
-- Em dev, a gente roda fetch, Vite e o servidor em paralelo, tudo monitorado com Nodemon, usando concurrently.
-- Aí o Hono renderiza os `.eta` com base nos dados tipados em: `app\types\pages.ts` e o Vite serve o TypeScript e o scss em `http://localhost:${vitePort}/src/main.ts`.
-- repara que a lógica do servidor ta em `server/app.ts`, ai tem um entrypoint pro vercel `server/index.ts` e um arquivo pra dev `server/dev.ts`. Isso por que, no bundle final eu não posso importar @hono/node-server por causa das limitações de edge runtime, nem se o import estiver em um if
-- No TypeScript do front, a gente importa o SCSS e o Vite injeta ele no browser. Para compilar o servidor eu estou usando o `tsx`
-
-## Processamento de Assets
-
-Toda ideia do projeto é ser o mais otimizado possivel, então para poder usar um hash agressivo
-em tudo (incluindo as imagens) temos um helper `asset`, disponível na variável `it`, usado assim:
-`<%= it.asset('src/assets/images/favicon.svg') %>` em dev ele manda para `http://localhost:${vitePort}/${originalPath}` e em build usa o manifest: `/${manifest[manifestKey].file}`;
-
-#### Sobre o runtime:
-
-##### Limitações do edge
-
-Quando você manda um arquivo para o Vercel ele é compactado com gzip e Brotli e, dependendo do navegador (quando ele faz uma requisição HTTP vem incluído no cabeçalho `Accept-Encoding: br, gzip`), ele usa br (mais eficiente) ou gzip.
-
-- Sua função edge não pode pesar mais de 1MB após ser comprimida com gzip (no Pro 2MB e Enterprise 4MB)
-- O limite de memória é fixo em 128 MB. Se passar, vai tomar um erro `502`
-- Você não tem acesso ao sistema de arquivos, ou seja, não pode usar fs (File System) para ler arquivos
-- Para analisar o bundle rode `pnpm analyze` em app ou `pnpm a` na raiz
-
-##### Vantagens
-
-- Você praticamente não vai ter cold start
-- [O tempo de resposta do servidor vai ser 2x mais rápido em warm starts e 9x mais rápido em cold starts:](https://www.openstatus.dev/blog/monitoring-latency-vercel-edge-vs-serverless)
-
-| Runtime               | p50 | p95   | p99   |
-| --------------------- | --- | ----- | ----- |
-| Serverless Cold Start | 859 | 1.046 | 1.156 |
-| Serverless Warm       | 246 | 563   | 855   |
-| Edge                  | 106 | 178   | 328   |
-
-OBS: p50 é a media, p95 = 1.046 quer dizer que 95% das requisições foram mais rápidas que 1.046 ms; intuitivamente, p99 representa o 1% das requisições que demoraram mais para responder.
-
-## Mudando de runtime
-
-Mude o `/server/config/.vc-config.json`
-de:
-
-```json
-{
-  "runtime": "edge",
-  "entrypoint": "index.js"
-}
-```
-
-para:
-
-```json
-{
-  "runtime": "nodejs22.x",
-  "handler": "index.cjs"
-}
-```
-
-No `tsup.config.ts` → format: `'cjs'` vira `'esm'`
-
-##### Meus testes
-
-- Mesmo com um JSON de 5MB minificado, ainda sobraram 368KB. A função estava pesando 656KB.
-- Mesmo que você mude o servidor, esse projeto suporta um CMS de até 5MB tranquilo. Daí pra frente, dependendo da lógica adicional que você implementar no Hono, talvez seja melhor mudar para serverless.
-
-## Roadmap e Contribuições
-
-O projeto está sempre evoluindo. Algumas ideias para o futuro:
-
-Backend->
-
-- **Melhor HRM pro fetch-sanity.ts**
-
-- **Fetches Incrementais do Sanity:** Hoje, cada build busca todo o conteúdo. Uma otimização incrível seria buscar apenas os documentos alterados desde o último build, como um "git" do conteúdo.
-- **Proxy reverso para urls do Sanity:** Atualmente, não há restrições nativas no Sanity para limitar parâmetros tipo ?w=99999, o que poderia permitir que alguem manipulasse os URLs e para solicitar imagens gigantes e queimar minha banda disponível. Seria interessante implementar um entrypoint que limite esses parâmetros pra evitar ataques.
-- **Melhor suporte para github codespaces:** Já funciona mas falta garantir suporte para que o vite consiga importar as fontes
-
-Frontend->
-
-- **Montar helpers com webGPU** Agora to trabalhando em um site com OGL e, como proximo passo, quero traduzir os ultilitarios que estou montando pra ele para o WebGPU. A ideia é facilitar o uso de shaders em imagens e textos. A parte do webGPU é pelo desafio XD
-
-- **Criar shaders ultilitários** -> Com webGPU
-
-Contribuições, issues e sugestões são muito bem-vindas!
-
-## Observações sobre o github codespaces->
-
-Se tiver rodando nele lembra de deixar as portas como publicas e de abrir o navegado com cors desativado
-
-https://dash.cloudflare.com/[SEU_ACCOUNT_ID]/
-
-Vai em Compute (Workers), seleciona o worker principal e adiciona um KV em "Bindings" dps em:
-https://dash.cloudflare.com/[SEU_ACCOUNT_ID]/workers/kv/namespaces
-https://dash.cloudflare.com/profile/api-tokens crie um token com permissão de leitura e escrita em Workers KV ou usa o preset: Edit Cloudflare Workers
-
-bunx wrangler kv namespace create CONTENT_KV -> Vai
-
-Se o vite mudar eu tenho que rodar build denovo por causa do manifest :(
-
-daria pra usar promisse.all no deploy mas ai teria que fazer cache manual sem turborepo
-
-Gera um hash -> node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+- If Vite changes, you need to run build again due to the manifest :(
+- You could use Promise.all in deployment, but then you'd have to manually handle caching without Turborepo
+- Only the CMS needs to be managed separately. I preferred to leave it out of turbo.json because otherwise, when GitHub Actions updates, instead of deploying only the main worker, the build will have a cache miss and redeploy all APIs.

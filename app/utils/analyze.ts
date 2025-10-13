@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url'
 import { gzipSync } from 'zlib'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const dir = path.resolve(__dirname, '../../out/')
+const dir = path.resolve(__dirname, '../out/')
 const CLOUDFLARE_LIMIT_KB = 1024 * 3 // 3MB
 
 // Função para formatar bytes em KB com 2 casas decimais
@@ -60,7 +60,7 @@ ANÁLISE GZIP (para Cloudflare Workers) 📄
 	console.error('❌ Erro ao calcular o tamanho do Gzip:', error)
 }
 
-// --- NOVA ANÁLISE DE SOURCE MAP ---
+// --- SOURCE MAP ---
 try {
 	console.log('📄 Analisando o source map para detalhar o tamanho dos módulos...')
 

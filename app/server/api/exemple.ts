@@ -6,7 +6,7 @@ const testApi = new Elysia({ adapter: CloudflareAdapter, prefix: '/api/test' })
 		message: 'Test API funcionando!',
 		timestamp: new Date().toISOString(),
 	}))
-	.get('/api/test', () => ({
+	.get('/exemple', () => ({
 		message: 'Hello from test API!',
 	}))
 export default testApi.compile()

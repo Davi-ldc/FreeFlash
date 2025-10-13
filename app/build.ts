@@ -73,7 +73,20 @@ async function main() {
 	const start = Date.now()
 
 	// Builda em paralelo
-	await Promise.all([buildWorker(), buildApis()])
+
+	switch (process.argv[2]) {
+		case 'main':
+			await buildWorker()
+			break
+		case 'api':
+			await buildApis()
+			break
+		case 'all':
+			await Promise.all([buildWorker(), buildApis()])
+			break
+		default:
+			throw new Error('❌ missing args, bun build.ts <main|api|all>')
+	}
 
 	const elapsed = ((Date.now() - start) / 1000).toFixed(2)
 

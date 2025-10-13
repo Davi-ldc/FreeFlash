@@ -8,6 +8,11 @@ export const schemaTypes = [
 				title: 'Text',
 				type: 'string',
 			},
+			{
+				name: 'OtherText',
+				title: 'Other Text',
+				type: 'string',
+			},
 		],
 		name: 'simpleText',
 		title: 'Simple Text',

@@ -1,29 +1,46 @@
 {
 	"$schema": "https://turbo.build/schema.json",
+	"remoteCache": {
+		"enabled": true
+	},
 	"tasks": {
 		"app#build": {
 			"cache": true,
-			"env": ["SANITY_PROJECT_ID"],
-			"dependsOn": ["app#build:vite"],
-			"inputs": ["server/**", "out/static/.vite/manifest.json", "src/views/**", "build.ts"],
-			"outputs": ["out/_worker.js", "out/api/**"]
+			"dependsOn": ["app#build:vite", "app#build:apis", "app#fetch:cms"],
+			"inputs": ["server/**", "out/static/.vite/manifest.json", "src/views/**", "build.ts", "content.json"],
+			"outputs": ["out/_worker.js"]
 		},
 		"app#build:vite": {
 			"cache": true,
 			"inputs": ["src/**/*", "vite.config.ts"]
 		},
-		"app#deploy:api-test": {
+		"app#build:apis": {
 			"cache": true,
-			"inputs": ["server/api/test.ts"]
+			"inputs": ["server/api/**"],
+			"env": ["GITHUB_REPO", "GITHUB_TOKEN"],
+			"outputs": ["out/api/**"]
 		},
-		"app#deploy:api-updateKv": {
-			"cache": true,
-			"inputs": ["server/api/updateKv.ts"]
+		"app#fetch:cms": {
+			"cache": false,
+			"env": ["SANITY_PROJECT_ID"],
+			"inputs": ["fetch-cms.ts"],
+			"outputs": ["content.json"]
 		},
 		"app#deploy": {
 			"cache": true,
-			"dependsOn": ["app#build", "app#deploy:api-test", "app#deploy:api-updateKv"],
+			"dependsOn": ["app#build", "app#deploy:api:exemple", "app#deploy:api:webhook"],
+			"env": ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN"],
 			"inputs": ["out/_worker.js"]
+		},
+		"app#deploy:api:exemple": {
+			"cache": true,
+			"env": ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN"],
+			"inputs": ["server/api/exemple.ts", "app#build:apis"]
+		},
+		"app#deploy:api:webhook": {
+			"cache": true,
+			"env": ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN"],
+			"inputs": ["server/api/webhook.ts", "app#build:apis"]
 		}
 	}
 }

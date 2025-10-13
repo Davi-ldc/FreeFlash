@@ -7,12 +7,6 @@
 	"assets": {
 		"directory": "app/out/static"
 	},
-	"kv_namespaces": [
-		{
-			"binding": "CONTENT_KV",
-			"id": "${CLOUDFLARE_KV_NAMESPACE_ID}"
-		}
-	],
 	"workers_dev": false,
 	"observability": {
 		"enabled": true,

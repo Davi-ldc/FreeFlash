@@ -3,15 +3,16 @@
 	"version": "1.0.0",
 	"private": true,
 	"type": "module",
-	"packageManager": "bun@1.2.22",
+	"packageManager": "bun@1.3.0",
 	"workspaces": [
 		"app",
 		"cms"
 	],
 	"scripts": {
 		"a": "bun run --cwd ./app analyze",
+		"sync-secrets": "bun run --cwd ./app sync-secrets",
 		"build": "turbo run build --filter=app",
-		"config": "bun run --cwd ./app config",
+		"config": "bun run build && bun run --cwd ./app config",
 		"deploy": "turbo run deploy --filter=app",
 		"dev": "concurrently --names \"CMS,APP\" -c \"bgBlue.bold,bgGreen.bold\" \"bun run dev:cms\" \"bun run dev:app\"",
 		"dev:app": "bun run --cwd ./app dev",

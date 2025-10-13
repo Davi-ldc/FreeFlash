@@ -22,7 +22,7 @@ const colors = {
 async function updateTurboConfig(apiNames: string[]) {
 	const turboConfig: BaseSchema = structuredClone(turboJson)
 
-	// Verifica duplicatas
+	// tasks duplicadas
 	const seen = new Set<string>()
 	for (const name of apiNames) {
 		if (seen.has(name)) {
@@ -31,7 +31,7 @@ async function updateTurboConfig(apiNames: string[]) {
 		seen.add(name)
 	}
 
-	const apiTasks = apiNames.map((name) => `app#deploy:api-${name}`)
+	const apiTasks = apiNames.map((name) => `app#deploy:api:${name}`)
 	const newTaskNames = new Set(['app#deploy', ...apiTasks])
 
 	// Remove tasks obsoletas
@@ -44,10 +44,11 @@ async function updateTurboConfig(apiNames: string[]) {
 
 	// Adiciona/atualiza tasks das APIs
 	for (const apiName of apiNames) {
-		const taskName = `app#deploy:api-${apiName}`
+		const taskName = `app#deploy:api:${apiName}`
 		const newTask = {
 			cache: true,
-			inputs: [`server/api/${apiName}.ts`],
+			env: ['CLOUDFLARE_ACCOUNT_ID', 'CLOUDFLARE_API_TOKEN'],
+			inputs: [`server/api/${apiName}.ts`, 'app#build:apis'],
 		}
 
 		const prev = turboConfig.tasks[taskName]
@@ -64,6 +65,7 @@ async function updateTurboConfig(apiNames: string[]) {
 	const deployTask = {
 		cache: true,
 		dependsOn: ['app#build', ...apiTasks],
+		env: ['CLOUDFLARE_ACCOUNT_ID', 'CLOUDFLARE_API_TOKEN'],
 		inputs: ['out/_worker.js'],
 	}
 
@@ -113,9 +115,6 @@ async function updatePackageScripts(apiNames: string[]) {
 	// Só escreve se algo mudou
 	if (JSON.stringify(packageJson.scripts) !== JSON.stringify(sortedScripts)) {
 		fs.writeFileSync(PACKAGE_JSON, `${JSON.stringify({ ...packageJson, scripts: sortedScripts }, null, 2)}\n`)
-
-		// Formata com Biome
-		await Bun.$`bunx biome format --write ${PACKAGE_JSON}`
 
 		console.log(`${colors.green}✓${colors.reset} package.json updated`)
 	} else {
@@ -168,8 +167,9 @@ async function deployWorker(name: string, main: string, route: string, customDom
 
 async function main() {
 	const [mode, apiName] = process.argv.slice(2)
-	const apiNames = fs.readdirSync(API_DIR).flatMap((file) => (file.endsWith('.js') ? [path.basename(file, '.js')] : []))
-
+	const apiNames = fs.existsSync(API_DIR)
+		? fs.readdirSync(API_DIR).flatMap((file) => (file.endsWith('.js') ? [path.basename(file, '.js')] : []))
+		: []
 	switch (mode) {
 		case 'config':
 			if (!fs.existsSync(API_DIR)) {
