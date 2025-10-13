@@ -34,13 +34,15 @@
 		},
 		"app#deploy:api:exemple": {
 			"cache": true,
+			"dependsOn": ["app#build:apis"],
 			"env": ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN"],
-			"inputs": ["server/api/exemple.ts", "app#build:apis"]
+			"inputs": ["server/api/exemple.ts"]
 		},
 		"app#deploy:api:webhook": {
 			"cache": true,
+			"dependsOn": ["app#build:apis"],
 			"env": ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN"],
-			"inputs": ["server/api/webhook.ts", "app#build:apis"]
+			"inputs": ["server/api/webhook.ts"]
 		}
 	}
 }

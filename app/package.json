@@ -1,45 +1,45 @@
 {
-	"name": "app",
-	"version": "1.0.0",
-	"type": "module",
-	"engines": {
-		"node": ">=20.x"
-	},
-	"scripts": {
-		"sync-secrets": "bun utils/sync-secrets.ts",
-		"analyze": "bun build.ts main --debug && bun utils/analyze.ts",
-		"build": "bun build.ts main && shx cp server/config/_headers out/static",
-		"build:apis": "bun build.ts api",
-		"build:vite": "vite build",
-		"config": "bun deploy.ts config",
-		"deploy": "bun deploy.ts main",
-		"deploy:all": "bun run deploy.ts all",
-		"deploy:api:exemple": "bun run deploy.ts api exemple",
-		"deploy:api:webhook": "bun run deploy.ts api webhook",
-		"dev": "concurrently --kill-others-on-fail -n FETCH,VITE,SERVE -c cyan,yellow,black \"bun run fetch:cms\" \"bun run dev:vite\" \"bun run dev:server\"",
-		"dev:server": "bun --hot ./server/dev.ts",
-		"dev:vite": "vite",
-		"fetch:cms": "bun fetch-cms.ts"
-	},
-	"dependencies": {
-		"@elysiajs/html": "^1.4.0",
-		"@sanity/client": "^6.29.1",
-		"@sanity/image-url": "^1.2.0",
-		"elysia": "1.4.9",
-		"shx": "^0.4.0"
-	},
-	"devDependencies": {
-		"@cloudflare/workers-types": "^4.2.0",
-		"@kitajs/html": "^4.2.10",
-		"@kitajs/ts-html-plugin": "^4.1.3",
-		"dotenv": "^16.6.1",
-		"glob": "^11.0.3",
-		"sass-embedded": "^1.93.2",
-		"stylelint": "^16.25.0",
-		"stylelint-config-standard-scss": "^16.0.0",
-		"stylelint-order": "^7.0.0",
-		"stylelint-scss": "^6.12.1",
-		"typescript": "^5.9.3",
-		"vite": "^7.1.9"
-	}
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20.x"
+  },
+  "scripts": {
+    "analyze": "bun build.ts main --debug && bun utils/analyze.ts",
+    "build": "bun build.ts main && shx cp server/config/_headers out/static",
+    "build:apis": "bun build.ts api",
+    "build:vite": "vite build",
+    "config": "bun deploy.ts config",
+    "deploy": "bun deploy.ts main",
+    "deploy:all": "bun run deploy.ts all",
+    "deploy:api:exemple": "bun run deploy.ts api exemple",
+    "deploy:api:webhook": "bun run deploy.ts api webhook",
+    "dev": "concurrently --kill-others-on-fail -n FETCH,VITE,SERVE -c cyan,yellow,black \"bun run fetch:cms\" \"bun run dev:vite\" \"bun run dev:server\"",
+    "dev:server": "bun --hot ./server/dev.ts",
+    "dev:vite": "vite",
+    "fetch:cms": "bun fetch-cms.ts",
+    "sync-secrets": "bun utils/sync-secrets.ts"
+  },
+  "dependencies": {
+    "@elysiajs/html": "^1.4.0",
+    "@sanity/client": "^6.29.1",
+    "@sanity/image-url": "^1.2.0",
+    "elysia": "1.4.9",
+    "shx": "^0.4.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.2.0",
+    "@kitajs/html": "^4.2.10",
+    "@kitajs/ts-html-plugin": "^4.1.3",
+    "dotenv": "^16.6.1",
+    "glob": "^11.0.3",
+    "sass-embedded": "^1.93.2",
+    "stylelint": "^16.25.0",
+    "stylelint-config-standard-scss": "^16.0.0",
+    "stylelint-order": "^7.0.0",
+    "stylelint-scss": "^6.12.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.9"
+  }
 }

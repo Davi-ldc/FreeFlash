@@ -27,7 +27,6 @@ Create a `.env` file in the `app` folder with:
 ```env
 SANITY_STUDIO_PROJECT_ID=xxxxxxxx
 SANITY_WEBHOOK_SECRET=xxxxxxxxxx
-SANITY_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 CLOUDFLARE_ACCOUNT_ID=xxxxxxxxxxxxxxxxxxxxxxxx
 CLOUDFLARE_API_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -38,6 +37,8 @@ GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 TURBO_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 TURBO_TEAM=yourteamname
 ```
+
+you can find cloudflare account id in https://dash.cloudflare.com/[YOUR_ACCOUNT_ID]/home
 
 Then run:
 
@@ -68,14 +69,7 @@ bun run a
 
 Go to https://dash.cloudflare.com/[YOUR_ACCOUNT_ID]/
 
-Navigate to Compute (Workers), select your main worker and add a KV in "Bindings", then go to:
-- https://dash.cloudflare.com/[YOUR_ACCOUNT_ID]/workers/kv/namespaces
-- https://dash.cloudflare.com/profile/api-tokens - create a token with read and write permissions for Workers KV or use the preset: "Edit Cloudflare Workers"
 
-Run:
-```bash
-bunx wrangler kv namespace create CONTENT_KV
-```
 
 ### Generate Webhook Secret
 

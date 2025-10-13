@@ -47,8 +47,9 @@ async function updateTurboConfig(apiNames: string[]) {
 		const taskName = `app#deploy:api:${apiName}`
 		const newTask = {
 			cache: true,
+			dependsOn: ['app#build:apis'],
 			env: ['CLOUDFLARE_ACCOUNT_ID', 'CLOUDFLARE_API_TOKEN'],
-			inputs: [`server/api/${apiName}.ts`, 'app#build:apis'],
+			inputs: [`server/api/${apiName}.ts`],
 		}
 
 		const prev = turboConfig.tasks[taskName]
