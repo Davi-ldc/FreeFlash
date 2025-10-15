@@ -1,10 +1,8 @@
 import { readdirSync, readFileSync, statSync } from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import { gzipSync } from 'zlib'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const dir = path.resolve(__dirname, '../out/')
+const dir = path.resolve(import.meta.dir, '../out/')
 const CLOUDFLARE_LIMIT_KB = 1024 * 3 // 3MB
 
 // Função para formatar bytes em KB com 2 casas decimais

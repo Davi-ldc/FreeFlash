@@ -1,13 +1,8 @@
-// server/dev.ts
-
 import fs from 'node:fs'
 import path from 'node:path'
-import { fileURLToPath, pathToFileURL } from 'node:url'
+import { pathToFileURL } from 'node:url'
 import { createApp } from './app'
 import { DEV_PORT, VITE_PORT } from './config/port'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 const { CODESPACE_NAME } = process.env as Record<string, string | undefined>
 
@@ -16,7 +11,7 @@ const viteBaseUrl = CODESPACE_NAME
 	: `http://localhost:${VITE_PORT}`
 
 async function DevApis(mainInstance: ReturnType<typeof createApp>) {
-	const apiDir = path.join(__dirname, './api')
+	const apiDir = path.join(import.meta.dir, './api')
 	console.log('📂 Carregando APIs de', apiDir)
 	if (!fs.existsSync(apiDir)) {
 		console.warn('[API] diretório /api não encontrado')

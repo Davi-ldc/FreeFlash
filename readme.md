@@ -31,8 +31,8 @@ SANITY_WEBHOOK_SECRET=xxxxxxxxxx
 CLOUDFLARE_ACCOUNT_ID=xxxxxxxxxxxxxxxxxxxxxxxx
 CLOUDFLARE_API_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-GITHUB_REPO=yourusername/yourrepo
-GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+GH_REPO=yourusername/yourrepo
+GH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 TURBO_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 TURBO_TEAM=yourteamname
@@ -86,5 +86,3 @@ In Sanity, go to Settings → API → Tokens → Editor. Create a token named so
 ## Notes
 
 - If Vite changes, you need to run build again due to the manifest :(
-- You could use Promise.all in deployment, but then you'd have to manually handle caching without Turborepo
-- Only the CMS needs to be managed separately. I preferred to leave it out of turbo.json because otherwise, when GitHub Actions updates, instead of deploying only the main worker, the build will have a cache miss and redeploy all APIs.

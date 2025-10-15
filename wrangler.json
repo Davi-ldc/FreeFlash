@@ -11,5 +11,18 @@
 	"observability": {
 		"enabled": true,
 		"head_sampling_rate": 1
+	},
+	"vars": {
+		"SANITY_STUDIO_PROJECT_ID": "${SANITY_STUDIO_PROJECT_ID}",
+		"SANITY_WEBHOOK_SECRET": "${SANITY_WEBHOOK_SECRET}",
+
+		"CLOUDFLARE_ACCOUNT_ID": "${CLOUDFLARE_ACCOUNT_ID}",
+		"CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_API_TOKEN}",
+
+		"GH_REPO": "${GH_REPO}",
+		"GH_TOKEN": "${GH_TOKEN}",
+
+		"TURBO_TOKEN": "${TURBO_TOKEN}",
+		"TURBO_TEAM": "${TURBO_TEAM}"
 	}
 }

@@ -126,6 +126,7 @@ async function updatePackageScripts(apiNames: string[]) {
 // Faz o deploy de um worker
 async function deployWorker(name: string, main: string, route: string, customDomain = false) {
 	const template = JSON.stringify(wranglerJson)
+	//resolve ${VAR} com variáveis de ambiente (caso você queira usar kv, por exemplos)
 	const baseConfig = JSON.parse(template.replace(/\$\{(\w+)\}/g, (_, key) => process.env[key] || ''))
 
 	const safeName = name.replace(/[^a-z0-9-]/gi, '_')
@@ -133,8 +134,9 @@ async function deployWorker(name: string, main: string, route: string, customDom
 
 	const config = {
 		...baseConfig,
-		main: main,
-		name: name,
+		main: main, //arquivo .js
+		name: name, //nome
+		//rota
 		routes: customDomain ? [{ custom_domain: true, pattern: route }] : [{ pattern: route, zone_name: BASE_URL }],
 	}
 
@@ -190,7 +192,7 @@ async function main() {
 				console.error('❌ API name required: bun deploy.ts api <name>')
 				process.exit(1)
 			}
-			await deployWorker(`freeflash-api-${apiName}`, `app/out/api/${apiName}.js`, `${BASE_URL}/api/${apiName}/*`)
+			await deployWorker(`freeflash-api-${apiName}`, `app/out/api/${apiName}.js`, `${BASE_URL}/api/${apiName}*`)
 			break
 
 		case 'all':

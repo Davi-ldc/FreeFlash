@@ -17,7 +17,7 @@
 		"app#build:apis": {
 			"cache": true,
 			"inputs": ["server/api/**"],
-			"env": ["GITHUB_REPO", "GITHUB_TOKEN"],
+			"env": ["GH_REPO", "GH_TOKEN"],
 			"outputs": ["out/api/**"]
 		},
 		"app#fetch:cms": {

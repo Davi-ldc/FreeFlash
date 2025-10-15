@@ -1,12 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { createClient } from '@sanity/client'
 // import imageUrlBuilder from '@sanity/image-url'
 import type { Content } from 'src/types/sanity'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 const defaultQuery = `*[_type == "simpleText"] {
 			_id,
@@ -39,6 +35,6 @@ export default async function fetchCMS(query: string = defaultQuery) {
 }
 
 const data = await fetchCMS()
-const dataPath = path.join(__dirname, '/content.json')
+const dataPath = path.join(import.meta.dir, '/content.json')
 fs.writeFileSync(dataPath, JSON.stringify(data, null, 2))
 console.log(`📝 Dados salvos em ${dataPath}`)
